@@ -21,7 +21,7 @@ public class EnemyAI : MonoBehaviour
         m_attackTimeElapsed += Time.deltaTime;
         if(m_attackTimeElapsed >= m_attackTimer)
         {
-            Attack();
+            //Attack();
         }
     }
 

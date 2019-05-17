@@ -9,6 +9,8 @@ public class CombatInput : MonoBehaviour
     private float dragDistance;  //minimum distance for a swipe to be registered
     [SerializeField]
     LMckamey_Player m_player = default;
+    [SerializeField]
+    CombatManager m_manager = default;
 
     void Start()
     {
@@ -56,8 +58,8 @@ public class CombatInput : MonoBehaviour
                 }
                 else
                 {   //It's a tap as the drag distance is less than 20% of the screen height
-                    Debug.Log("Tap");
-                    Debug.Log(Input.GetTouch(0).position);
+                    m_manager.CheckIfEnemyTapped(touch.position);
+
                 }
             }
         }

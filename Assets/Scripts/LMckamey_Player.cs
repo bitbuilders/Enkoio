@@ -11,6 +11,8 @@ struct ElementalColors
 }
 public class LMckamey_Player : MonoBehaviour
 {
+
+    [SerializeField] int m_damage = 10;
     private eElemntType m_currentElementType = eElemntType.AIR;
     private int elementIndex = 0;
     private ElementalColors colors = default;
@@ -70,5 +72,10 @@ public class LMckamey_Player : MonoBehaviour
     public eElemntType GetElementType()
     {
         return m_currentElementType;
+    }
+
+    public int GetDamage()
+    {
+        return m_damage;
     }
 }
