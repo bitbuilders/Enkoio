@@ -145,7 +145,7 @@ Grid:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6819464}
   m_Enabled: 1
-  m_CellSize: {x: 0.9, y: 0.5, z: 1}
+  m_CellSize: {x: 1, y: 0.5, z: 1}
   m_CellGap: {x: 0, y: 0, z: 0}
   m_CellLayout: 2
   m_CellSwizzle: 0
@@ -322,7 +322,7 @@ TilemapRenderer:
   m_MaxChunkCount: 16
   m_MaxFrameAge: 16
   m_SortOrder: 3
-  m_Mode: 0
+  m_Mode: 1
   m_DetectChunkCullingBounds: 0
   m_MaskInteraction: 0
 --- !u!1839735485 &625019523
@@ -978,4 +978,78 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a31bdf36d45757f469c799ed49984c22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TileTemplate: {fileID: 11400000, guid: c1cfb0179e087e245a27e7972330c440, type: 2}
+  m_SpawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.28991216
+      value: 0.5304448
+      inSlope: 2.578842
+      outSlope: 2.578842
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14408135
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5328959
+      value: 1.1433136
+      inSlope: -0.1158108
+      outSlope: -0.1158108
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.59351486
+    - serializedVersion: 3
+      time: 0.6776922
+      value: 0.93810874
+      inSlope: -1.2523398
+      outSlope: -1.2523398
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.59906244
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: -0.14405282
+      outSlope: -0.14405282
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_SpawnRate: 0.04
+  m_SpawnHeight: 5
+  m_FallSpeed: 1.25
+  m_TileTypes:
+  - Type: 0
+    Tile: {fileID: 11400000, guid: 64008a04f291e2e49bc3b8708e5a6f86, type: 2}
+    Occurrence: 0.5
+    Current: 0
+  - Type: 1
+    Tile: {fileID: 11400000, guid: 0d0c19e1840bc09408f35b4aac2494c8, type: 2}
+    Occurrence: 0.5
+    Current: 0
+  - Type: 2
+    Tile: {fileID: 11400000, guid: 710d0ce95a24b8146b26a2a3b41e3312, type: 2}
+    Occurrence: 0.5
+    Current: 0
+  - Type: 3
+    Tile: {fileID: 11400000, guid: 44dfbd5bce8846b4385f8560034c5c39, type: 2}
+    Occurrence: 0.5
+    Current: 0
+  - Type: 4
+    Tile: {fileID: 11400000, guid: 0190a4fbb494331468e0a44e22d66f1a, type: 2}
+    Occurrence: 0.5
+    Current: 0

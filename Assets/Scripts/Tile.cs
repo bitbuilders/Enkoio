@@ -11,18 +11,45 @@ public enum TileAttribute
     HOME
 }
 
+public struct TileInfo
+{
+    public TileInfo(Vector2Int pos, TileAttribute type, AnimationCurve spawnCurve, float fallSpeed, TileMap tmap)
+    {
+        CellPosition = pos;
+        Attribute = type;
+        SpawnCurve = spawnCurve;
+        FallSpeed = fallSpeed;
+        TileMap = tmap;
+    }
+
+    public Vector2Int CellPosition;
+    public TileAttribute Attribute;
+    public AnimationCurve SpawnCurve;
+    public float FallSpeed;
+    public TileMap TileMap;
+}
+
 public class Tile
 {
     public Vector2Int CellPosition { get; private set; }
     public TileAttribute Attribute { get; private set; }
+    public AnimationCurve SpawnCurve { get; private set; }
+    public float FallSpeed { get; private set; }
 
     protected TileMap m_TileMap;
 
-    public void Init(Vector2Int cellPosition, TileAttribute attribute, TileMap tileMap)
+    public void Init(TileInfo tileInfo)
     {
-        CellPosition = cellPosition;
-        Attribute = attribute;
-        m_TileMap = tileMap;
+        CellPosition = tileInfo.CellPosition;
+        Attribute = tileInfo.Attribute;
+        SpawnCurve = tileInfo.SpawnCurve;
+        FallSpeed = tileInfo.FallSpeed;
+        m_TileMap = tileInfo.TileMap;
+    }
+
+    virtual public void OnCreate()
+    {
+        
     }
 
     virtual public void OnEnter()
