@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-#if PLATFORM_ANDROID
 using UnityEngine.Android;
-#endif
 using UnityEngine;
 
 public class LocationManager : MonoBehaviour
@@ -12,10 +10,18 @@ public class LocationManager : MonoBehaviour
 
     [Header("Debug")]
     public bool DEBUGGING = false;
+
     [Space]
+
     [Header("Settings")]
     [SerializeField]
-    TextMeshProUGUI currentLocationText = null;
+    TextMeshProUGUI InformationText = null;
+
+    [SerializeField]
+    TextMeshProUGUI LatitudeText = null;
+
+    [SerializeField]
+    TextMeshProUGUI LongitudeText = null;
 
     [Range(.1f, 1.0f)]
     [SerializeField]
@@ -23,10 +29,19 @@ public class LocationManager : MonoBehaviour
 
     LocationInfo previousLocationInfo;
     LocationInfo currentLocationInfo;
+    LocationInfo originalLocationInfo;
+
     Vector2 distance = Vector2.zero;
+    float totalDistanceTraveled = 0.0f;
+
+    long updates = 0;
+    /// <summary>
+    /// The Earth's radius in kilometers
+    /// </summary>
+    const float EarthRadius = 6371.137f;
 
     IEnumerator Start()
-    {
+    {       
         if (Instance != null)
         {
             Destroy(this.gameObject);
@@ -54,61 +69,70 @@ public class LocationManager : MonoBehaviour
             yield return new WaitForSeconds(1);
             maxWait--;
         }
+
+        if(maxWait == 0)
+        {
+            yield break;
+        }
+
+        UpdateInformation();
+
         StartCoroutine(UpdateLocation());
     }
 
-    void Update()
-    {
-    }
+    bool initialLocationSet = false;
 
     IEnumerator UpdateLocation()
     {
         while (true)
         {
-            if(Input.location.status == LocationServiceStatus.Running)
+            updates++;   
+            if (Input.location.status == LocationServiceStatus.Running)
             {
-                previousLocationInfo = currentLocationInfo;
-                currentLocationInfo = Input.location.lastData;
-                currentLocationText.text = "Latitude: " + currentLocationInfo.latitude + " Longitude: " + currentLocationInfo.longitude;
+                if(!initialLocationSet)
+                {
+                    originalLocationInfo = Input.location.lastData;
+                    initialLocationSet = true;
+                }
 
-                Vector2 direction = new Vector2(
-                    currentLocationInfo.latitude - previousLocationInfo.latitude,
-                    currentLocationInfo.longitude - previousLocationInfo.longitude).normalized;
+                //previousLocationInfo = currentLocationInfo;
+                currentLocationInfo = Input.location.lastData;
 
                 float distanceTraveled = CalculateDistance(
-                    previousLocationInfo.latitude,
+                    originalLocationInfo.latitude,
                     currentLocationInfo.latitude,
-                    previousLocationInfo.longitude,
+                    originalLocationInfo.longitude,
                     currentLocationInfo.longitude);
 
-                distance += direction * distanceTraveled;
-                if(DEBUGGING)
-                {
-                    Debug.Log(distance);
-                }
+                totalDistanceTraveled = distanceTraveled;
+                UpdateInformation();
             }
-            if (!DEBUGGING)
-            {
-                yield return new WaitForSecondsRealtime(updateTime);
-            }
-            else
-            {
-                yield return null;
-            }
+
+            yield return new WaitForSeconds(updateTime);
         }
     }
 
-    private float CalculateDistance(float lat_1, float lat_2, float long_1, float long_2)
+    private float CalculateDistance(float lat1, float lat2, float lon1, float lon2)
     {
-        int R = 6371;
-        var lat_rad_1 = Mathf.Deg2Rad * lat_1;
-        var lat_rad_2 = Mathf.Deg2Rad * lat_2;
-        var d_lat_rad = Mathf.Deg2Rad * (lat_2 - lat_1);
-        var d_long_rad = Mathf.Deg2Rad * (long_2 - long_1);
-        var a = Mathf.Pow(Mathf.Sin(d_lat_rad / 2), 2) + (Mathf.Pow(Mathf.Sin(d_long_rad / 2), 2) * Mathf.Cos(lat_rad_1) * Mathf.Cos(lat_rad_2));
-        var c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
-        var total_dist = R * c * 1000;
-        //feet 3280.84
+        float rLat1 = lat1 * Mathf.Deg2Rad;
+        float rLat2 = lat2 * Mathf.Deg2Rad;
+        float rLon1 = lon1 * Mathf.Deg2Rad;
+        float rLon2 = lon2 * Mathf.Deg2Rad;
+
+        float dLat = (rLat2 - rLat1);
+        float dLon = (rLon2 - rLon1);
+
+        float a = Mathf.Pow(Mathf.Sin(dLat / 2), 2) + (Mathf.Pow(Mathf.Sin(dLon / 2), 2) * Mathf.Cos(rLat1) * Mathf.Cos(rLat2));
+        float c = 2 * Mathf.Atan2(Mathf.Sqrt(a), Mathf.Sqrt(1 - a));
+        float total_dist = EarthRadius * c * 1000.0f;
+
         return total_dist;
+    }
+
+    private void UpdateInformation()
+    {
+        LatitudeText.text = "Latitude: " + currentLocationInfo.latitude;
+        LongitudeText.text = "Latitude: " + currentLocationInfo.longitude;
+        InformationText.text = "Number of updates: " + updates + " Distance from start: " + totalDistanceTraveled;
     }
 }
