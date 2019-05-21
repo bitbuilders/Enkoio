@@ -2,14 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileAttribute
-{
-    SHOP,
-    MYSTERY,
-    BAD,
-    CASTLE,
-    HOME
-}
+
 
 public struct TileInfo
 {

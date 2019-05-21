@@ -9,3 +9,12 @@ public enum eElemntType
     EARTH,
     AIR
 }
+
+public enum TileAttribute
+{
+    SHOP,
+    MYSTERY,
+    BAD,
+    CASTLE,
+    HOME
+}
