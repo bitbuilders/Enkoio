@@ -27,9 +27,10 @@ public class TileMap : Singleton<TileMap>
 {
     [SerializeField] AnimationCurve m_SpawnCurve = null;
     [SerializeField] AnimationCurve m_ChildCurve = null;
-    [SerializeField] [Range(0.0f, 2.0f)] float m_SpawnRate = 0.03f;
+    [SerializeField] [Range(0.0f, 2.0f)] float m_SpawnRate = 0.03f; // .03 ~~ 1s total time, .04 ~~ 1.4s total time
     [SerializeField] [Range(0.0f, 10.0f)] float m_SpawnHeight = 5.0f;
     [SerializeField] [Range(-3.0f, 3.0f)] float m_ChildHeight = 0.5f;
+    [SerializeField] [Range(0.0f, 10.0f)] float m_ChildSpawnDelay = 1.5f;
     [SerializeField] [Range(0.0f, 10.0f)] float m_FallSpeed = 1.25f;
     [SerializeField] List<TileType> m_TileTypes = null;
 
@@ -59,14 +60,37 @@ public class TileMap : Singleton<TileMap>
 
     IEnumerator CreateTiles(Vector2Int p1, Vector2Int p2)
     {
-        for (int x = p1.x; x < p2.x; x++)
+        float start = Time.time;
+
+        float time = 0.0f;
+        int size = Mathf.Abs(p2.x - p1.x) * Mathf.Abs(p2.y - p1.y);
+        int x = p1.x;
+        int y = p2.y - 1;
+        int count = 0;
+        while (count < size)
         {
-            for (int y = p2.y - 1; y >= p1.y; y--)
+            time += Time.deltaTime;
+            if (time >= m_SpawnRate)
             {
+                time -= m_SpawnRate;
                 AddTile(new Vector2Int(x, y));
-                yield return new WaitForSeconds(m_SpawnRate);
+                if (y >= p1.y)
+                {
+                    y--;
+                    if (y < p1.y)
+                    {
+                        y = p2.y - 1;
+                        x++;
+                    }
+                }
+                count++;
             }
+
+            if (count < size) yield return null;
         }
+
+        float end = Time.time;
+        print("Took: " + (end - start) + " seconds to spawn tiles");
     }
 
     void AddTile(Vector2Int pos)
@@ -88,17 +112,28 @@ public class TileMap : Singleton<TileMap>
         m_MovingTiles.Add(new MovingTile() { Tile = tile, Start = p, End = Vector2.zero });
         SetTilePosition(pos, p);
 
+        StartCoroutine(AddChildTile(tt, tile, (Vector3Int)pos));
+    }
+
+    IEnumerator AddChildTile(TileType tt, Tile tile, Vector3Int pos)
+    {
+        yield return new WaitForSeconds(m_ChildSpawnDelay);
         if (tt.Child)
         {
             GameObject child = Instantiate(tt.Child);
             child.transform.localScale = Vector3.one * 0.5f;
             Vector3 offset = Vector3.up * m_ChildHeight;
-            child.transform.position = m_Tilemap.CellToWorld((Vector3Int)pos) + offset;
+            child.transform.position = m_Tilemap.CellToWorld(pos) + offset;
 
-            Vector3 worldPos = m_Tilemap.CellToWorld((Vector3Int)pos);
+            Vector3 worldPos = m_Tilemap.CellToWorld(pos);
             Vector3 startPos = worldPos + Vector3.up * m_SpawnHeight;
-            m_MovingChildren.Add(new MovingTile() { Tile = tile, Source = child,
-                Start = startPos, End = worldPos + offset });
+            m_MovingChildren.Add(new MovingTile()
+            {
+                Tile = tile,
+                Source = child,
+                Start = startPos,
+                End = worldPos + offset
+            });
             child.transform.position = startPos;
         }
     }

@@ -1042,37 +1042,37 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.28991216
-      value: 0.5304448
-      inSlope: 2.578842
-      outSlope: 2.578842
+      time: 0.531042
+      value: 0.45732304
+      inSlope: 2.5086343
+      outSlope: 2.5086343
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.14408135
-      outWeight: 0.33333334
+      inWeight: 0.27666453
+      outWeight: 0.09993857
     - serializedVersion: 3
-      time: 0.5328959
-      value: 1.1433136
-      inSlope: -0.1158108
-      outSlope: -0.1158108
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 1
-      outWeight: 0.59351486
-    - serializedVersion: 3
-      time: 0.6776922
-      value: 0.93810874
-      inSlope: -1.2523398
-      outSlope: -1.2523398
+      time: 0.6816152
+      value: 0.97974145
+      inSlope: -0.53124255
+      outSlope: -0.53124255
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.59906244
+      outWeight: 0.9423734
+    - serializedVersion: 3
+      time: 0.7687024
+      value: 0.88490736
+      inSlope: -0.3226762
+      outSlope: -0.3226762
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: -0.14405282
-      outSlope: -0.14405282
+      inSlope: 0.6574586
+      outSlope: 0.6574586
       tangentMode: 0
       weightedMode: 0
       inWeight: 1
@@ -1080,9 +1080,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_SpawnRate: 0.04
+  m_SpawnRate: 0.035
   m_SpawnHeight: 5
   m_ChildHeight: 0.5
+  m_ChildSpawnDelay: 1.25
   m_FallSpeed: 1.25
   m_TileTypes:
   - Type: 0
