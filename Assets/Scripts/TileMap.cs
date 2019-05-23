@@ -4,6 +4,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+public enum Direction
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+}
+
 [System.Serializable]
 public class TileType
 {
@@ -23,10 +31,11 @@ public class MovingTile
     public Vector2 End;
 }
 
-public class TileMap : Singleton<TileMap>
+public class TileMap : MonoBehaviour
 {
     [SerializeField] AnimationCurve m_SpawnCurve = null;
     [SerializeField] AnimationCurve m_ChildCurve = null;
+    [SerializeField] [Range(1, 100)] int m_ViewSize = 7;
     [SerializeField] [Range(0.0f, 2.0f)] float m_SpawnRate = 0.03f; // .03 ~~ 1s total time, .04 ~~ 1.4s total time
     [SerializeField] [Range(0.0f, 10.0f)] float m_SpawnHeight = 5.0f;
     [SerializeField] [Range(-3.0f, 3.0f)] float m_ChildHeight = 0.5f;
@@ -38,7 +47,6 @@ public class TileMap : Singleton<TileMap>
     List<MovingTile> m_MovingTiles;
     List<MovingTile> m_MovingChildren;
     Tilemap m_Tilemap;
-    int m_ViewSize;
 
     void Start()
     {
@@ -46,16 +54,47 @@ public class TileMap : Singleton<TileMap>
         m_MovingTiles = new List<MovingTile>();
         m_MovingChildren = new List<MovingTile>();
         m_Tilemap = GetComponent<Tilemap>();
-        Init(6); // Temp
+        Init();
     }
 
-    public void Init(int viewSize)
+    public void Init()
     {
-        m_ViewSize = viewSize;
-
         m_Tilemap.ClearAllTiles();
         int size = m_ViewSize / 2;
-        StartCoroutine(CreateTiles(new Vector2Int(-size, -size), new Vector2Int(size, size)));
+        int offset = m_ViewSize % 2;
+        Vector2Int p1 = new Vector2Int(-size - offset, -size - offset);
+        Vector2Int p2 = new Vector2Int(size, size);
+        StartCoroutine(CreateTiles(p1, p2));
+    }
+
+    public void Move(Vector2Int amount)
+    {
+        for (int i = 0; i < m_MovingTiles.Count; i++)
+        {
+            m_MovingTiles[i].Start = Vector2.zero;
+            m_MovingTiles[i].End = amount;
+            m_MovingTiles[i].Time = 0.0f;
+        }
+    }
+    
+    Vector2Int GetVectorFromDirection(Direction dir)
+    {
+        Vector2Int d = Vector2Int.zero;
+
+        switch (dir)
+        {
+            case Direction.UP:
+
+                break;
+            case Direction.DOWN:
+                break;
+            case Direction.LEFT:
+                break;
+            case Direction.RIGHT:
+                break;
+        }
+
+        return d;
     }
 
     IEnumerator CreateTiles(Vector2Int p1, Vector2Int p2)
