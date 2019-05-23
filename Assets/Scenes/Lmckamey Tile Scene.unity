@@ -217,7 +217,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2.5
+  orthographic size: 2.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1029,27 +1029,115 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_SpawnRate: 0.04
+  m_ChildCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.531042
+      value: 0.45732304
+      inSlope: 2.5086343
+      outSlope: 2.5086343
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.27666453
+      outWeight: 0.09993857
+    - serializedVersion: 3
+      time: 0.6816152
+      value: 0.97974145
+      inSlope: -0.53124255
+      outSlope: -0.53124255
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.9423734
+    - serializedVersion: 3
+      time: 0.7687024
+      value: 0.88490736
+      inSlope: -0.3226762
+      outSlope: -0.3226762
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.6574586
+      outSlope: 0.6574586
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  m_ViewSize: 5
+  m_SpawnRate: 0.035
   m_SpawnHeight: 5
+  m_ChildHeight: 0.5
+  m_ChildSpawnDelay: 1.25
   m_FallSpeed: 1.25
   m_TileTypes:
-  - Type: 0
-    Tile: {fileID: 11400000, guid: 64008a04f291e2e49bc3b8708e5a6f86, type: 2}
-    Occurrence: 0.5
-    Current: 0
   - Type: 1
-    Tile: {fileID: 11400000, guid: 0d0c19e1840bc09408f35b4aac2494c8, type: 2}
+    Tile: {fileID: 11400000, guid: 64008a04f291e2e49bc3b8708e5a6f86, type: 2}
+    Child: {fileID: 171364, guid: f9e8de9a259544d4abf62f44ee21bf37, type: 3}
     Occurrence: 0.5
     Current: 0
-  - Type: 2
-    Tile: {fileID: 11400000, guid: 710d0ce95a24b8146b26a2a3b41e3312, type: 2}
-    Occurrence: 0.5
-    Current: 0
-  - Type: 3
-    Tile: {fileID: 11400000, guid: 44dfbd5bce8846b4385f8560034c5c39, type: 2}
-    Occurrence: 0.5
-    Current: 0
-  - Type: 4
-    Tile: {fileID: 11400000, guid: 0190a4fbb494331468e0a44e22d66f1a, type: 2}
-    Occurrence: 0.5
-    Current: 0
+--- !u!1 &1742599217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1742599219}
+  - component: {fileID: 1742599218}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1742599218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742599217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e9c5a263382284ba82231ccef88a2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_enemies: []
+  m_enemyPrefabs: []
+  m_Player: {fileID: 0}
+  m_enemyRaduis: 2
+  m_numOfPotentialEnemies: 6
+  m_numOfTilesPerSide: 5
+--- !u!4 &1742599219
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742599217}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.7334557, y: 2.0165935, z: -7.981396}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

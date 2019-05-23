@@ -13,7 +13,7 @@ public class LMckamey_Player : MonoBehaviour
 {
 
     [SerializeField] int m_damage = 10;
-    private eElemntType m_currentElementType = eElemntType.AIR;
+    private eElementType m_currentElementType = eElementType.AIR;
     private int elementIndex = 0;
     private ElementalColors colors = default;
     private SpriteRenderer m_spriteRenderer = default;
@@ -33,26 +33,26 @@ public class LMckamey_Player : MonoBehaviour
         m_currentElementType = GetNextEnum(swipedLeft);
         switch (m_currentElementType)
         {
-            case eElemntType.FIRE:
+            case eElementType.FIRE:
                 m_spriteRenderer.color = colors.fireColor;
                 break;
-            case eElemntType.WATER:
+            case eElementType.WATER:
                 m_spriteRenderer.color = colors.waterColor;
                 break;
-            case eElemntType.EARTH:
+            case eElementType.EARTH:
                 m_spriteRenderer.color = colors.earthColor;
                 break;
-            case eElemntType.AIR:
+            case eElementType.AIR:
                 m_spriteRenderer.color = colors.airColor;
                 break;
         }
         Debug.Log(m_currentElementType);
     }
 
-    public eElemntType GetNextEnum(bool isIncrementing)
+    public eElementType GetNextEnum(bool isIncrementing)
     {
-        eElemntType nextElement = default;
-        var enums = System.Enum.GetValues(typeof(eElemntType));
+        eElementType nextElement = default;
+        var enums = System.Enum.GetValues(typeof(eElementType));
         if (isIncrementing)
         {
             elementIndex++;
@@ -65,11 +65,11 @@ public class LMckamey_Player : MonoBehaviour
             if (elementIndex < 0)
                 elementIndex = enums.Length-1;
         }
-        nextElement = (eElemntType)enums.GetValue(elementIndex);
+        nextElement = (eElementType)enums.GetValue(elementIndex);
         return nextElement;
     }
 
-    public eElemntType GetElementType()
+    public eElementType GetElementType()
     {
         return m_currentElementType;
     }

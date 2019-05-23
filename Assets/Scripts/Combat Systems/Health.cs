@@ -12,10 +12,10 @@ public class Health : MonoBehaviour
         return m_currentHealthPoints > 0;
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, eElementType attackingElement, eElementType defendingElement)
     {
-        Debug.Log(gameObject.tag + "has taken " + damage + " damage!");
-        m_currentHealthPoints -= damage;
+        int modDamage = DetermindDamageDone(damage, attackingElement, defendingElement);
+        m_currentHealthPoints -= modDamage;
         if (m_currentHealthPoints <= 0) Die();
     }
 
@@ -44,5 +44,58 @@ public class Health : MonoBehaviour
     private void Die()
     {
         Destroy(this.gameObject);
+    }
+
+    private int DetermindDamageDone(int baseDamage, eElementType attackingElement, eElementType defendingElement)
+    {
+        int modifiedDamage = baseDamage;
+        switch (attackingElement)
+        {
+            case eElementType.FIRE:
+                switch (defendingElement)
+                {
+                    case eElementType.WATER:
+                        modifiedDamage = modifiedDamage / 2;
+                        break;
+                    case eElementType.EARTH:
+                        modifiedDamage = modifiedDamage + (modifiedDamage / 2);
+                        break;
+                }
+                break;
+            case eElementType.WATER:
+                switch (defendingElement)
+                {
+                    case eElementType.FIRE:
+                        modifiedDamage = modifiedDamage / 2;
+                        break;
+                    case eElementType.AIR:
+                        modifiedDamage = modifiedDamage + (modifiedDamage / 2);
+                        break;
+                }
+                break;
+            case eElementType.EARTH:
+                switch (defendingElement)
+                {
+                    case eElementType.FIRE:
+                        modifiedDamage = modifiedDamage + (modifiedDamage / 2);
+                        break;
+                    case eElementType.AIR:
+                        modifiedDamage = modifiedDamage / 2;
+                        break;
+                }
+                break;
+            case eElementType.AIR:
+                switch (defendingElement)
+                {
+                    case eElementType.WATER:
+                        modifiedDamage = modifiedDamage + (modifiedDamage / 2);
+                        break;
+                    case eElementType.EARTH:
+                        modifiedDamage = modifiedDamage / 2;
+                        break;
+                }
+                break;
+        }
+        return modifiedDamage;
     }
 }
