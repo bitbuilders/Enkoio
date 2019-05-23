@@ -943,6 +943,8 @@ Tilemap:
   m_TileColorArray:
   - m_RefCount: 64
     m_Data: {r: 1, g: 1, b: 1, a: 1}
+  - m_RefCount: 0
+    m_Data: {r: 0, g: 0, b: 0, a: 0}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Origin: {x: -4, y: -4, z: 0}
@@ -993,12 +995,12 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0.28991216
       value: 0.5304448
-      inSlope: 2.578842
-      outSlope: 2.578842
+      inSlope: 4.32566
+      outSlope: 4.32566
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.14408135
-      outWeight: 0.33333334
+      outWeight: 0.22473459
     - serializedVersion: 3
       time: 0.5328959
       value: 1.1433136

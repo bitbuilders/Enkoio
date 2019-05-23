@@ -4,14 +4,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public enum Direction
-{
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-}
-
 [System.Serializable]
 public class TileType
 {
@@ -47,6 +39,7 @@ public class TileMap : MonoBehaviour
     List<MovingTile> m_MovingTiles;
     List<MovingTile> m_MovingChildren;
     Tilemap m_Tilemap;
+    Vector2Int m_Bounds;
 
     void Start()
     {
@@ -62,39 +55,56 @@ public class TileMap : MonoBehaviour
         m_Tilemap.ClearAllTiles();
         int size = m_ViewSize / 2;
         int offset = m_ViewSize % 2;
-        Vector2Int p1 = new Vector2Int(-size - offset, -size - offset);
-        Vector2Int p2 = new Vector2Int(size, size);
+        m_Bounds = new Vector2Int(-size - offset, size);
+        Vector2Int p1 = new Vector2Int(m_Bounds.x, m_Bounds.x);
+        Vector2Int p2 = new Vector2Int(m_Bounds.y, m_Bounds.y);
         StartCoroutine(CreateTiles(p1, p2));
     }
 
-    public void Move(Vector2Int amount)
+    public void MoveTo(Vector2 worldPos)
     {
+        Vector2Int dir = TileFromWorldPos(worldPos);
+
+
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {
-            m_MovingTiles[i].Start = Vector2.zero;
-            m_MovingTiles[i].End = amount;
-            m_MovingTiles[i].Time = 0.0f;
+            //m_MovingTiles[i].Start = Vector2.zero;
+            //m_MovingTiles[i].End = dir * -1;
+            //m_MovingTiles[i].Time = 0.0f;
+            m_MovingTiles[i].Tile.CellPosition -= dir;
+        }
+
+        StartCoroutine(MoveTiles(dir * -1));
+    }
+
+    Vector2Int TileFromWorldPos(Vector2 worldPos)
+    {
+        return (Vector2Int)m_Tilemap.WorldToCell(worldPos);
+    }
+
+    IEnumerator MoveTiles(Vector2Int dir)
+    {
+        for (float a = 0.0f; a < 1.0f; a += Time.deltaTime)
+        {
+            for (int i = 0; i < m_MovingTiles.Count; i++)
+            {
+                Vector2Int pos = m_MovingTiles[i].Tile.CellPosition;
+                if (TileOOB(pos))
+                {
+                    Color c = m_MovingTiles[i].Tile.TileSprite.color;
+                    c.a = 1.0f - a;
+                    m_MovingTiles[i].Tile.TileSprite.color = c;
+                    m_Tilemap.RefreshAllTiles();
+                }
+            }
+            yield return null;
         }
     }
-    
-    Vector2Int GetVectorFromDirection(Direction dir)
+
+    bool TileOOB(Vector2Int tp)
     {
-        Vector2Int d = Vector2Int.zero;
-
-        switch (dir)
-        {
-            case Direction.UP:
-
-                break;
-            case Direction.DOWN:
-                break;
-            case Direction.LEFT:
-                break;
-            case Direction.RIGHT:
-                break;
-        }
-
-        return d;
+        return ((tp.x < m_Bounds.x || tp.x > m_Bounds.y) ||
+                (tp.y < m_Bounds.x) || tp.y > m_Bounds.y);
     }
 
     IEnumerator CreateTiles(Vector2Int p1, Vector2Int p2)
@@ -130,6 +140,8 @@ public class TileMap : MonoBehaviour
 
         float end = Time.time;
         print("Took: " + (end - start) + " seconds to spawn tiles");
+        yield return new WaitForSeconds(0.75f);
+        MoveTo(new Vector2(0.3f, 0.7f));
     }
 
     void AddTile(Vector2Int pos)
@@ -140,10 +152,11 @@ public class TileMap : MonoBehaviour
         }
 
         TileType tt = m_TileTypes.OrderByDescending(t => t.Current).First();
-        m_Tilemap.SetTile((Vector3Int)pos, tt.Tile);
+        UnityEngine.Tilemaps.Tile tileSprite = tt.Tile;
+        m_Tilemap.SetTile((Vector3Int)pos, tileSprite);
 
         Tile tile = new Tile();
-        tile.Init(new TileInfo(pos, tt.Type, m_SpawnCurve, m_FallSpeed, this));
+        tile.Init(new TileInfo(pos, tt.Type, m_SpawnCurve, m_FallSpeed, this, tileSprite));
         tile.OnCreate();
         m_Tiles.Add(tile);
 

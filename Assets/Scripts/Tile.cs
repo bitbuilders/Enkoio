@@ -13,13 +13,15 @@ public enum TileAttribute
 
 public struct TileInfo
 {
-    public TileInfo(Vector2Int pos, TileAttribute type, AnimationCurve spawnCurve, float fallSpeed, TileMap tmap)
+    public TileInfo(Vector2Int pos, TileAttribute type, AnimationCurve spawnCurve, float fallSpeed, 
+        TileMap tmap, UnityEngine.Tilemaps.Tile tileSprite)
     {
         CellPosition = pos;
         Attribute = type;
         SpawnCurve = spawnCurve;
         FallSpeed = fallSpeed;
         TileMap = tmap;
+        TileSprite = tileSprite;
     }
 
     public Vector2Int CellPosition;
@@ -27,13 +29,15 @@ public struct TileInfo
     public AnimationCurve SpawnCurve;
     public float FallSpeed;
     public TileMap TileMap;
+    public UnityEngine.Tilemaps.Tile TileSprite;
 }
 
 public class Tile
 {
-    public Vector2Int CellPosition { get; private set; }
+    public Vector2Int CellPosition { get; set; }
     public TileAttribute Attribute { get; private set; }
     public AnimationCurve SpawnCurve { get; private set; }
+    public UnityEngine.Tilemaps.Tile TileSprite { get; private set; }
     public float FallSpeed { get; private set; }
 
     protected TileMap m_TileMap;
@@ -43,6 +47,7 @@ public class Tile
         CellPosition = tileInfo.CellPosition;
         Attribute = tileInfo.Attribute;
         SpawnCurve = tileInfo.SpawnCurve;
+        TileSprite = tileInfo.TileSprite;
         FallSpeed = tileInfo.FallSpeed;
         m_TileMap = tileInfo.TileMap;
     }
