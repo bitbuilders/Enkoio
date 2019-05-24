@@ -1122,11 +1122,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_enemies: []
-  m_enemyPrefabs: []
+  m_enemyPrefabs:
+  - {fileID: 1955266975757903165, guid: 1a226ea6a28fcef458b1f52979b5c795, type: 3}
   m_Player: {fileID: 0}
   m_enemyRaduis: 2
   m_numOfPotentialEnemies: 6
   m_numOfTilesPerSide: 5
+  m_tileMap: {fileID: 625019524}
 --- !u!4 &1742599219
 Transform:
   m_ObjectHideFlags: 0
