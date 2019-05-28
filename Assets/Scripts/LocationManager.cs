@@ -60,7 +60,7 @@ public class LocationManager : MonoBehaviour
             yield break;
         }
 
-        Input.location.Start(1.0f, 1.0f);
+        Input.location.Start(2.0f, 1.0f);
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
@@ -97,28 +97,31 @@ public class LocationManager : MonoBehaviour
                     updates++;
                 }
 
-                //previousLocationInfo = currentLocationInfo;
-                currentLocationInfo = Input.location.lastData;
-
-                float distanceTraveled = CalculateDistance(
-                    originalLocationInfo.latitude,
-                    currentLocationInfo.latitude,
-                    originalLocationInfo.longitude,
-                    currentLocationInfo.longitude);
-
-                if(distanceTraveled - totalDistanceTraveled >= 1.0f)
+                if (initialLocationSet)
                 {
-                    Vector2 direction = CalculateDirection(
+                    //previousLocationInfo = currentLocationInfo;
+                    currentLocationInfo = Input.location.lastData;
+
+                    float distanceTraveled = CalculateDistance(
                         originalLocationInfo.latitude,
                         currentLocationInfo.latitude,
                         originalLocationInfo.longitude,
                         currentLocationInfo.longitude);
 
-                    totalDistanceTraveled = distanceTraveled;
-                    position = direction * totalDistanceTraveled;
-                }
+                    if (distanceTraveled - totalDistanceTraveled >= 1.0f)
+                    {
+                        Vector2 direction = CalculateDirection(
+                            originalLocationInfo.latitude,
+                            currentLocationInfo.latitude,
+                            originalLocationInfo.longitude,
+                            currentLocationInfo.longitude);
 
-                UpdateInformation();
+                        totalDistanceTraveled = distanceTraveled;
+                        position = direction * totalDistanceTraveled;
+                    }
+
+                    UpdateInformation();
+                }
             }
 
             yield return new WaitForSeconds(updateTime);
@@ -161,8 +164,9 @@ public class LocationManager : MonoBehaviour
 
     private void UpdateInformation()
     {
-        LatitudeText.text = "Latitude: " + currentLocationInfo.latitude;
-        LongitudeText.text = "Latitude: " + currentLocationInfo.longitude;
-        InformationText.text = "Distance from start: " + totalDistanceTraveled;
+        LatitudeText.text = $"Latitude: {currentLocationInfo.latitude}";
+        LongitudeText.text = $"Longitude: {currentLocationInfo.longitude}";
+        InformationText.text = $"Distance from start: {totalDistanceTraveled} \n" +
+            $"Position: {position.ToString("F5")}";
     }
 }
