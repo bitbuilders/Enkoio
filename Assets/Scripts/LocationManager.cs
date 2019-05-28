@@ -27,21 +27,19 @@ public class LocationManager : MonoBehaviour
     [SerializeField]
     private float updateTime = .1f;
 
-    LocationInfo previousLocationInfo;
+    //LocationInfo previousLocationInfo;
     LocationInfo currentLocationInfo;
     LocationInfo originalLocationInfo;
 
     Vector2 distance = Vector2.zero;
     float totalDistanceTraveled = 0.0f;
+    [HideInInspector]
+    public Vector2 position = Vector2.zero;
 
-    long updates = 0;
-    /// <summary>
-    /// The Earth's radius in kilometers
-    /// </summary>
     const float EarthRadius = 6371.137f;
 
     IEnumerator Start()
-    {       
+    {
         if (Instance != null)
         {
             Destroy(this.gameObject);
@@ -62,7 +60,7 @@ public class LocationManager : MonoBehaviour
             yield break;
         }
 
-        Input.location.Start();
+        Input.location.Start(1.0f, 1.0f);
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
@@ -70,7 +68,7 @@ public class LocationManager : MonoBehaviour
             maxWait--;
         }
 
-        if(maxWait == 0)
+        if (maxWait == 0)
         {
             yield break;
         }
@@ -81,18 +79,22 @@ public class LocationManager : MonoBehaviour
     }
 
     bool initialLocationSet = false;
+    int updates = 0;
 
     IEnumerator UpdateLocation()
     {
         while (true)
         {
-            updates++;   
             if (Input.location.status == LocationServiceStatus.Running)
             {
-                if(!initialLocationSet)
+                if (!initialLocationSet && updates == 10)
                 {
                     originalLocationInfo = Input.location.lastData;
                     initialLocationSet = true;
+                }
+                else
+                {
+                    updates++;
                 }
 
                 //previousLocationInfo = currentLocationInfo;
@@ -104,7 +106,18 @@ public class LocationManager : MonoBehaviour
                     originalLocationInfo.longitude,
                     currentLocationInfo.longitude);
 
-                totalDistanceTraveled = distanceTraveled;
+                if(distanceTraveled - totalDistanceTraveled >= 1.0f)
+                {
+                    Vector2 direction = CalculateDirection(
+                        originalLocationInfo.latitude,
+                        currentLocationInfo.latitude,
+                        originalLocationInfo.longitude,
+                        currentLocationInfo.longitude);
+
+                    totalDistanceTraveled = distanceTraveled;
+                    position = direction * totalDistanceTraveled;
+                }
+
                 UpdateInformation();
             }
 
@@ -129,10 +142,27 @@ public class LocationManager : MonoBehaviour
         return total_dist;
     }
 
+    private Vector2 CalculateDirection(float lat1, float lat2, float lon1, float lon2)
+    {
+        Vector2 direction = Vector2.zero;
+
+        float rLat1 = lat1 * Mathf.Deg2Rad;
+        float rLat2 = lat2 * Mathf.Deg2Rad;
+        float rLon1 = lon1 * Mathf.Deg2Rad;
+        float rLon2 = lon2 * Mathf.Deg2Rad;
+
+        Vector2 oldPosition = new Vector2((EarthRadius * Mathf.Cos(rLat1) * Mathf.Cos(rLon1)), EarthRadius * Mathf.Cos(rLat1) * Mathf.Sin(rLon1));
+        Vector2 newPosition = new Vector2((EarthRadius * Mathf.Cos(rLat2) * Mathf.Cos(rLon2)), EarthRadius * Mathf.Cos(rLat2) * Mathf.Sin(rLon2));
+
+        direction = (newPosition - oldPosition).normalized;
+
+        return direction;
+    }
+
     private void UpdateInformation()
     {
         LatitudeText.text = "Latitude: " + currentLocationInfo.latitude;
         LongitudeText.text = "Latitude: " + currentLocationInfo.longitude;
-        InformationText.text = "Number of updates: " + updates + " Distance from start: " + totalDistanceTraveled;
+        InformationText.text = "Distance from start: " + totalDistanceTraveled;
     }
 }
