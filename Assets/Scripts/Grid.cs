@@ -29,6 +29,7 @@ public class Grid : MonoBehaviour
         LocationManager locationManager = LocationManager.Instance;
         xPosOnGrid = Mathf.RoundToInt((locationManager.position.x / 10.0f) * transform.rect.width / 7.0f);
         yPosOnGrid = Mathf.RoundToInt((locationManager.position.y / 10.0f) * transform.rect.height / 7.0f);
+        player.transform.position = new Vector3(xPosOnGrid, yPosOnGrid);
         positionText.text = $"({xPosOnGrid}, {yPosOnGrid})";
         
     }
