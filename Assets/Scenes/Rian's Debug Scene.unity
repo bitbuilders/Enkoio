@@ -834,7 +834,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 241184720}
-  positionText: {fileID: 0}
+  positionText: {fileID: 1373559477}
   tiles:
   - {fileID: 0}
   - {fileID: 0}
