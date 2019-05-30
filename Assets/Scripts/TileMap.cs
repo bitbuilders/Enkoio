@@ -21,7 +21,7 @@ public class MovingTile
     public float Time;
     public Vector2 Start;
     public Vector2 End;
-    public Vector2Int TargetTile;
+    public Vector2Int OriginalTile;
 }
 
 public class TileMap : MonoBehaviour
@@ -71,10 +71,14 @@ public class TileMap : MonoBehaviour
 
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {
-            m_MovingTiles[i].Start = Vector2.zero;
-            m_MovingTiles[i].End = dir * -1;
+            int prev = tile.x / m_ViewSize + tile.y % m_ViewSize;
+            m_MovingTiles[i].Start = dir;
+            m_MovingTiles[i].End = Vector2.zero;
             m_MovingTiles[i].Time = 0.0f;
-            m_MovingTiles[i].TargetTile = m_MovingTiles[i].Tile.CellPosition - tile;
+            m_MovingTiles[i].OriginalTile = m_MovingTiles[i].Tile.CellPosition;
+            m_MovingTiles[i].Tile.CellPosition -= tile;
+            m_Tilemap.SetTile((Vector3Int)m_MovingTiles[i + prev].Tile.CellPosition, m_MovingTiles[i].Tile.TileSprite);
+            m_Tilemap.SetTile((Vector3Int)m_MovingTiles[i].Tile.CellPosition, m_MovingTiles[i + prev].Tile.TileSprite);
             //print("tile: " + m_MovingTiles[i].Tile.CellPosition + " | OOB: " + TileOOB(m_MovingTiles[i].Tile.CellPosition));
         }
 
@@ -85,7 +89,8 @@ public class TileMap : MonoBehaviour
             m_MovingChildren[i].Start = m_Tilemap.CellToWorld(tPos) + cHeight;
             m_MovingChildren[i].End = m_Tilemap.CellToWorld(tPos - (Vector3Int)tile) + cHeight;
             m_MovingChildren[i].Time = 0.0f;
-            m_MovingChildren[i].TargetTile = m_MovingChildren[i].Tile.CellPosition - tile;
+            m_MovingChildren[i].OriginalTile = m_MovingChildren[i].Tile.CellPosition;
+            m_MovingChildren[i].Tile.CellPosition -= tile;
             //print("tile: " + m_MovingTiles[i].Tile.CellPosition + " | OOB: " + TileOOB(m_MovingTiles[i].Tile.CellPosition));
         }
 
@@ -104,16 +109,26 @@ public class TileMap : MonoBehaviour
 
     IEnumerator MoveTiles(Vector2 dir, Vector2Int tile)
     {
+        //Vector2Int p1 = new Vector2Int(m_Bounds.x, m_Bounds.x);
+        //Vector2Int p2 = new Vector2Int(m_Bounds.x, m_Bounds.x);
+        //StartCoroutine(CreateTiles(p1, p2));
+
         for (float a = 0.0f; a < 1.0f; a += Time.deltaTime)
         {
             for (int i = 0; i < m_MovingTiles.Count; i++)
             {
-                Vector2Int pos = m_MovingTiles[i].Tile.CellPosition - tile;
+                Vector2Int pos = m_MovingTiles[i].Tile.CellPosition;
                 if (TileOOB(pos))
                 {
                     SetTileAplpha(i, a);
-                    //TODO: Fade Children
-
+                }
+            }
+            for (int i = 0; i < m_MovingChildren.Count; i++)
+            {
+                Vector2Int pos = m_MovingChildren[i].Tile.CellPosition;
+                if (TileOOB(pos))
+                {
+                    SetChildAlpha(m_MovingChildren[i].Source, 1.0f - a);
                 }
             }
             m_Tilemap.RefreshAllTiles();
@@ -122,12 +137,22 @@ public class TileMap : MonoBehaviour
 
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {
-            Vector2Int pos = m_MovingTiles[i].Tile.CellPosition - tile;
+            Vector2Int pos = m_MovingTiles[i].Tile.CellPosition;
             if (TileOOB(pos))
             {
-                SetTileAplpha(i, 0.0f);
+                SetTileAplpha(i, 1.0f);
             }
         }
+        for (int i = 0; i < m_MovingChildren.Count; i++)
+        {
+            Vector2Int pos = m_MovingChildren[i].Tile.CellPosition;
+            if (TileOOB(pos))
+            {
+                SetChildAlpha(m_MovingChildren[i].Source, 0.0f);
+            }
+        }
+
+        m_Tilemap.RefreshAllTiles();
     }
 
     void SetTileAplpha(int index, float alpha)
@@ -135,6 +160,14 @@ public class TileMap : MonoBehaviour
         Color c = m_MovingTiles[index].Tile.TileSprite.color;
         c.a = 1.0f - alpha;
         m_MovingTiles[index].Tile.TileSprite.color = c;
+    }
+
+    void SetChildAlpha(GameObject child, float alpha)
+    {
+        SpriteRenderer sr = child.GetComponent<SpriteRenderer>();
+        Color c = sr.color;
+        c.a = alpha;
+        sr.color = c;
     }
 
     bool TileOOB(Vector2Int tp)
@@ -198,7 +231,7 @@ public class TileMap : MonoBehaviour
         m_Tiles.Add(tile);
 
         Vector2 p = Vector2.up * m_SpawnHeight;
-        m_MovingTiles.Add(new MovingTile() { Tile = tile, Start = p, End = Vector2.zero, TargetTile = pos });
+        m_MovingTiles.Add(new MovingTile() { Tile = tile, Start = p, End = Vector2.zero, OriginalTile = pos });
         SetTilePosition(pos, p);
 
         StartCoroutine(AddChildTile(tt, tile, (Vector3Int)pos));
@@ -210,7 +243,6 @@ public class TileMap : MonoBehaviour
         if (tt.Child)
         {
             GameObject child = Instantiate(tt.Child);
-            child.transform.localScale = Vector3.one * 0.5f;
             Vector3 offset = Vector3.up * m_ChildHeight;
             child.transform.position = m_Tilemap.CellToWorld(pos) + offset;
 
@@ -222,7 +254,7 @@ public class TileMap : MonoBehaviour
                 Source = child,
                 Start = startPos,
                 End = worldPos + offset,
-                TargetTile = (Vector2Int)pos
+                OriginalTile = (Vector2Int)pos
             });
             child.transform.position = startPos;
         }
@@ -257,7 +289,7 @@ public class TileMap : MonoBehaviour
                 if (last < 1.0f)
                 {
                     if (child) mt.Source.transform.position = mt.End;
-                    else SetTilePosition(mt.Tile.CellPosition, mt.End);
+                    else SetTilePosition(mt.OriginalTile, mt.End);
                 }
                 continue;
             }
@@ -265,7 +297,7 @@ public class TileMap : MonoBehaviour
             float t = curve.Evaluate(mt.Time);
             Vector2 p = Vector2.LerpUnclamped(mt.Start, mt.End, t);
             if (child) mt.Source.transform.position = p;
-            else SetTilePosition(mt.Tile.CellPosition, p);
+            else SetTilePosition(mt.OriginalTile, p);
         }
     }
 
