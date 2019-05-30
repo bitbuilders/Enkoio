@@ -14,14 +14,21 @@ public class TileType
     [HideInInspector] public float Current;
 }
 
+public class Line
+{
+    public Vector2 P1;
+    public Vector2 P2;
+}
+
 public class MovingTile
 {
     public Tile Tile;
-    public GameObject Source;
-    public float Time;
-    public Vector2 Start;
-    public Vector2 End;
-    public Vector2Int OriginalTile;
+    public GameObject Child;
+    public Line TilePath;
+    public Line ChildPath;
+    public float SpawnTime;
+    public float ChildTime;
+    public bool Dead;
 }
 
 public class TileMap : MonoBehaviour
@@ -38,7 +45,6 @@ public class TileMap : MonoBehaviour
 
     List<Tile> m_Tiles;
     List<MovingTile> m_MovingTiles;
-    List<MovingTile> m_MovingChildren;
     Tilemap m_Tilemap;
     Vector2Int m_Bounds;
 
@@ -46,7 +52,6 @@ public class TileMap : MonoBehaviour
     {
         m_Tiles = new List<Tile>();
         m_MovingTiles = new List<MovingTile>();
-        m_MovingChildren = new List<MovingTile>();
         m_Tilemap = GetComponent<Tilemap>();
         Init();
     }
@@ -71,27 +76,20 @@ public class TileMap : MonoBehaviour
 
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {
-            int prev = tile.x / m_ViewSize + tile.y % m_ViewSize;
-            m_MovingTiles[i].Start = dir;
-            m_MovingTiles[i].End = Vector2.zero;
-            m_MovingTiles[i].Time = 0.0f;
-            m_MovingTiles[i].OriginalTile = m_MovingTiles[i].Tile.CellPosition;
             m_MovingTiles[i].Tile.CellPosition -= tile;
-            m_Tilemap.SetTile((Vector3Int)m_MovingTiles[i + prev].Tile.CellPosition, m_MovingTiles[i].Tile.TileSprite);
-            m_Tilemap.SetTile((Vector3Int)m_MovingTiles[i].Tile.CellPosition, m_MovingTiles[i + prev].Tile.TileSprite);
-            //print("tile: " + m_MovingTiles[i].Tile.CellPosition + " | OOB: " + TileOOB(m_MovingTiles[i].Tile.CellPosition));
-        }
 
-        for (int i = 0; i < m_MovingChildren.Count; i++)
-        {
-            Vector3Int tPos = (Vector3Int)m_MovingChildren[i].Tile.CellPosition;
-            Vector3 cHeight = Vector3.up * m_ChildHeight;
-            m_MovingChildren[i].Start = m_Tilemap.CellToWorld(tPos) + cHeight;
-            m_MovingChildren[i].End = m_Tilemap.CellToWorld(tPos - (Vector3Int)tile) + cHeight;
-            m_MovingChildren[i].Time = 0.0f;
-            m_MovingChildren[i].OriginalTile = m_MovingChildren[i].Tile.CellPosition;
-            m_MovingChildren[i].Tile.CellPosition -= tile;
-            //print("tile: " + m_MovingTiles[i].Tile.CellPosition + " | OOB: " + TileOOB(m_MovingTiles[i].Tile.CellPosition));
+            m_MovingTiles[i].TilePath = new Line() { P1 = dir, P2 = Vector2.zero };
+            Vector2 cH = Vector2.up * m_ChildHeight;
+            Vector2 cPos = m_Tilemap.CellToWorld((Vector3Int)m_MovingTiles[i].Tile.CellPosition) + (Vector3)cH;
+            m_MovingTiles[i].ChildPath = new Line() { P1 = cPos + dir, P2 = cPos };
+            m_MovingTiles[i].SpawnTime = 0.0f;
+            m_MovingTiles[i].ChildTime = 0.0f;
+
+            m_Tilemap.SetTile((Vector3Int)m_MovingTiles[i].Tile.CellPosition, m_MovingTiles[i].Tile.TileSprite);
+            m_Tilemap.SetTile((Vector3Int)(m_MovingTiles[i].Tile.CellPosition + tile), null);
+
+            SetTilePosition(m_MovingTiles[i].Tile.CellPosition, m_MovingTiles[i].TilePath.P1);
+            if (m_MovingTiles[i].Child) m_MovingTiles[i].Child.transform.position = m_MovingTiles[i].ChildPath.P1;
         }
 
         StartCoroutine(MoveTiles(dir * -1, tile));
@@ -107,28 +105,25 @@ public class TileMap : MonoBehaviour
         return m_Tilemap.CellToWorld((Vector3Int)tile);
     }
 
+    int IndexFromTile(Vector2Int tile)
+    {
+        int x = tile.x + -m_Bounds.x;
+        int y = tile.y + -m_Bounds.x;
+        return x * m_ViewSize + (m_ViewSize - y - 1);
+    }
+
     IEnumerator MoveTiles(Vector2 dir, Vector2Int tile)
     {
-        //Vector2Int p1 = new Vector2Int(m_Bounds.x, m_Bounds.x);
-        //Vector2Int p2 = new Vector2Int(m_Bounds.x, m_Bounds.x);
-        //StartCoroutine(CreateTiles(p1, p2));
-
         for (float a = 0.0f; a < 1.0f; a += Time.deltaTime)
         {
+            float alpha = 1.0f - a;
             for (int i = 0; i < m_MovingTiles.Count; i++)
             {
                 Vector2Int pos = m_MovingTiles[i].Tile.CellPosition;
                 if (TileOOB(pos))
                 {
-                    SetTileAplpha(i, a);
-                }
-            }
-            for (int i = 0; i < m_MovingChildren.Count; i++)
-            {
-                Vector2Int pos = m_MovingChildren[i].Tile.CellPosition;
-                if (TileOOB(pos))
-                {
-                    SetChildAlpha(m_MovingChildren[i].Source, 1.0f - a);
+                    SetTileAplpha(i, alpha);
+                    if (m_MovingTiles[i].Child) SetChildAlpha(m_MovingTiles[i].Child, alpha);
                 }
             }
             m_Tilemap.RefreshAllTiles();
@@ -140,15 +135,9 @@ public class TileMap : MonoBehaviour
             Vector2Int pos = m_MovingTiles[i].Tile.CellPosition;
             if (TileOOB(pos))
             {
-                SetTileAplpha(i, 1.0f);
-            }
-        }
-        for (int i = 0; i < m_MovingChildren.Count; i++)
-        {
-            Vector2Int pos = m_MovingChildren[i].Tile.CellPosition;
-            if (TileOOB(pos))
-            {
-                SetChildAlpha(m_MovingChildren[i].Source, 0.0f);
+                SetTileAplpha(i, 0.0f);
+                if (m_MovingTiles[i].Child) SetChildAlpha(m_MovingTiles[i].Child, 0.0f);
+                m_MovingTiles[i].Dead = true;
             }
         }
 
@@ -158,7 +147,7 @@ public class TileMap : MonoBehaviour
     void SetTileAplpha(int index, float alpha)
     {
         Color c = m_MovingTiles[index].Tile.TileSprite.color;
-        c.a = 1.0f - alpha;
+        c.a = alpha;
         m_MovingTiles[index].Tile.TileSprite.color = c;
     }
 
@@ -226,78 +215,94 @@ public class TileMap : MonoBehaviour
         m_Tilemap.SetTile((Vector3Int)pos, tileSprite);
 
         Tile tile = new Tile();
-        tile.Init(new TileInfo(pos, tt.Type, m_SpawnCurve, m_FallSpeed, this, tileSprite));
+        tile.Init(new TileInfo(pos, tt.Type, m_SpawnCurve, m_ChildCurve, m_FallSpeed, this, tileSprite));
         tile.OnCreate();
         m_Tiles.Add(tile);
 
         Vector2 p = Vector2.up * m_SpawnHeight;
-        m_MovingTiles.Add(new MovingTile() { Tile = tile, Start = p, End = Vector2.zero, OriginalTile = pos });
+        MovingTile mt = new MovingTile()
+        {
+            Tile = tile,
+            Child = null,
+            TilePath = new Line()
+            {
+                P1 = Vector2.zero + Vector2.up * m_SpawnHeight,
+                P2 = Vector2.zero
+            }
+        };
+        m_MovingTiles.Add(mt);
         SetTilePosition(pos, p);
 
-        StartCoroutine(AddChildTile(tt, tile, (Vector3Int)pos));
+        StartCoroutine(AddChildTile(tt, mt));
     }
 
-    IEnumerator AddChildTile(TileType tt, Tile tile, Vector3Int pos)
+    IEnumerator AddChildTile(TileType tt, MovingTile mt)
     {
         yield return new WaitForSeconds(m_ChildSpawnDelay);
         if (tt.Child)
         {
             GameObject child = Instantiate(tt.Child);
-            Vector3 offset = Vector3.up * m_ChildHeight;
-            child.transform.position = m_Tilemap.CellToWorld(pos) + offset;
 
-            Vector3 worldPos = m_Tilemap.CellToWorld(pos);
+            Vector3 worldPos = m_Tilemap.CellToWorld((Vector3Int)mt.Tile.CellPosition);
             Vector3 startPos = worldPos + Vector3.up * m_SpawnHeight;
-            m_MovingChildren.Add(new MovingTile()
-            {
-                Tile = tile,
-                Source = child,
-                Start = startPos,
-                End = worldPos + offset,
-                OriginalTile = (Vector2Int)pos
-            });
+            mt.Child = child;
+            mt.ChildPath = new Line() { P1 = startPos, P2 = (Vector2)worldPos + Vector2.up * m_ChildHeight };
             child.transform.position = startPos;
         }
     }
 
     private void Update()
     {
-        UpdateSpawningTiles();
-        UpdateChildTiles();
-    }
-
-    void UpdateSpawningTiles()
-    {
-        UpdateTiles(m_MovingTiles, m_SpawnCurve, false);
-    }
-
-    void UpdateChildTiles()
-    {
-        UpdateTiles(m_MovingChildren, m_ChildCurve, true);
-    }
-
-    void UpdateTiles(List<MovingTile> tiles, AnimationCurve curve, bool child)
-    {
-        for (int i = 0; i < tiles.Count; i++)
+        for (int i = 0; i < m_MovingTiles.Count; i++)
         {
-            MovingTile mt = tiles[i];
+            MovingTile mt = m_MovingTiles[i];
 
-            float last = mt.Time;
-            mt.Time += Time.deltaTime * mt.Tile.FallSpeed;
-            if (mt.Time >= 1.0f)
+            if (m_MovingTiles[i].Dead)
             {
-                if (last < 1.0f)
-                {
-                    if (child) mt.Source.transform.position = mt.End;
-                    else SetTilePosition(mt.OriginalTile, mt.End);
-                }
+                m_Tilemap.SetTile((Vector3Int)mt.Tile.CellPosition, null);
+                m_MovingTiles.RemoveAt(i);
+                if (mt.Child) Destroy(mt.Child);
+                i--;
                 continue;
             }
 
-            float t = curve.Evaluate(mt.Time);
-            Vector2 p = Vector2.LerpUnclamped(mt.Start, mt.End, t);
-            if (child) mt.Source.transform.position = p;
-            else SetTilePosition(mt.OriginalTile, p);
+            // Child
+            if (mt.Child)
+            {
+                float lastC = mt.ChildTime;
+                mt.ChildTime += Time.deltaTime;
+                if (mt.ChildTime >= 1.0f)
+                {
+                    if (lastC < 1.0f)
+                    {
+
+                    }
+                }
+                else
+                {
+                    float cT = mt.Tile.ChildCurve.Evaluate(mt.ChildTime);
+                    Vector2 cP = Vector2.LerpUnclamped(mt.ChildPath.P1, mt.ChildPath.P2, cT);
+                    mt.Child.transform.position = cP;
+                }
+            }
+
+            // Tile
+            float lastS = mt.SpawnTime;
+            mt.SpawnTime += Time.deltaTime;
+            if (mt.SpawnTime >= 1.0f)
+            {
+                if (lastS < 1.0f)
+                {
+
+                }
+                continue;
+            }
+            else
+            {
+                float sT = mt.Tile.SpawnCurve.Evaluate(mt.SpawnTime);
+                Vector2 sP = Vector2.LerpUnclamped(mt.TilePath.P1, mt.TilePath.P2, sT);
+                SetTilePosition(mt.Tile.CellPosition, sP);
+            }
         }
     }
 
