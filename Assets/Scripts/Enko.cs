@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class Enko : Singleton<Enko>
 {
-    
+    private void Update()
+    {
+        
+    }
 }
