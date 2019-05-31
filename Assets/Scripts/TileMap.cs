@@ -157,7 +157,7 @@ public class TileMap : MonoBehaviour
 
     void SetChildAlpha(GameObject child, float alpha)
     {
-        SpriteRenderer sr = child.GetComponent<SpriteRenderer>();
+        SpriteRenderer sr = child.GetComponentInChildren<SpriteRenderer>();
         Color c = sr.color;
         c.a = alpha;
         sr.color = c;
