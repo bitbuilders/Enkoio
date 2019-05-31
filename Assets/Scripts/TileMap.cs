@@ -67,10 +67,12 @@ public class TileMap : MonoBehaviour
         StartCoroutine(CreateTiles(p1, p2));
     }
 
-    public void MoveTo(Vector2 worldPos)
+    public bool MoveTo(Vector2 worldPos)
     {
         Vector2Int tile = TileFromWorldPos(worldPos);
         Vector2 dir = WorldFromTile(tile);
+        
+        if (tile == Vector2Int.zero) return false;
 
         print("tile: " + tile + " dir: " + dir);
 
@@ -93,6 +95,8 @@ public class TileMap : MonoBehaviour
         }
 
         StartCoroutine(MoveTiles(dir * -1, tile));
+
+        return true;
     }
 
     Vector2Int TileFromWorldPos(Vector2 worldPos)
@@ -181,13 +185,14 @@ public class TileMap : MonoBehaviour
         while (count < size)
         {
             time += Time.deltaTime;
+            bool canPlace = false;
             if (time >= m_SpawnRate)
             {
                 time -= m_SpawnRate;
                 IEnumerable<MovingTile> t = null;
                 if (m_MovingTiles.Count > 0)
                     t = m_MovingTiles.Where(mt => mt.Tile.CellPosition == new Vector2Int(x, y));
-                bool canPlace = (t == null || t.Count() == 0);
+                canPlace = (t == null || t.Count() == 0);
                 if (canPlace) AddTile(new Vector2Int(x, y));
                 if (y >= p1.y)
                 {
@@ -199,8 +204,8 @@ public class TileMap : MonoBehaviour
                     }
                 }
                 count++;
-                if (!canPlace) continue;
             }
+            if (!canPlace) continue;
 
             if (count < size) yield return null;
         }

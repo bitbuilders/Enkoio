@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class TileManager : Singleton<TileManager>
 {
-    
+    private void Update()
+    {
+
+    }
 }
