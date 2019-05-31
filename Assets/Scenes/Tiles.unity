@@ -587,7 +587,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_ViewSize: 3
+  m_ViewSize: 5
   m_SpawnRate: 0.035
   m_SpawnHeight: 5
   m_ChildHeight: 0.5
