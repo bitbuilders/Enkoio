@@ -75,6 +75,8 @@ public class TileMap : MonoBehaviour
         if (tile == Vector2Int.zero) return false;
 
         print("tile: " + tile + " dir: " + dir);
+        MovingTile enteredTile = m_MovingTiles.Where(mt => mt.Tile.CellPosition - tile == Vector2Int.zero).First();
+        if (enteredTile != null) enteredTile.Tile.OnEnter();
 
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {
@@ -212,9 +214,8 @@ public class TileMap : MonoBehaviour
 
         float end = Time.time;
         print("Took: " + (end - start) + " seconds to spawn tiles");
-        yield return new WaitForSeconds(2f);
-        Vector2 target = new Vector2(0.6f, 0.0f);
-        MoveTo(target);
+
+        // Here lies code that Lucas brutally murdered, do not trust anything he says R.I.P.
     }
 
     void AddTile(Vector2Int pos)
