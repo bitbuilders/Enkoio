@@ -1090,8 +1090,102 @@ MonoBehaviour:
   - Type: 1
     Tile: {fileID: 11400000, guid: 64008a04f291e2e49bc3b8708e5a6f86, type: 2}
     Child: {fileID: 171364, guid: f9e8de9a259544d4abf62f44ee21bf37, type: 3}
-    Occurrence: 0.5
+    Occurrence: 0.8
     Current: 0
+  - Type: 2
+    Tile: {fileID: 11400000, guid: f9bf9f69653c6ec45a65223644d5a18c, type: 2}
+    Child: {fileID: 1955266975757903165, guid: 1a226ea6a28fcef458b1f52979b5c795, type: 3}
+    Occurrence: 0.2
+    Current: 0
+--- !u!1 &1120604838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1120604840}
+  - component: {fileID: 1120604839}
+  m_Layer: 0
+  m_Name: Combat Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1120604839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120604838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d5763d5d53e5a145a90a34fd1b99f91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_player: {fileID: 1404455981}
+  m_manager: {fileID: 1742599218}
+--- !u!4 &1120604840
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1120604838}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1404455980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1404455982}
+  - component: {fileID: 1404455981}
+  m_Layer: 0
+  m_Name: Enko
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1404455981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404455980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c33fcd349ef6c8e40982a984b44007c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_damage: 10
+--- !u!4 &1404455982
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1404455980}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1742599217
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,7 +1197,7 @@ GameObject:
   - component: {fileID: 1742599219}
   - component: {fileID: 1742599218}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Combat Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1124,11 +1218,8 @@ MonoBehaviour:
   m_enemies: []
   m_enemyPrefabs:
   - {fileID: 1955266975757903165, guid: 1a226ea6a28fcef458b1f52979b5c795, type: 3}
-  m_Player: {fileID: 0}
-  m_enemyRaduis: 2
-  m_numOfPotentialEnemies: 6
-  m_numOfTilesPerSide: 5
-  m_tileMap: {fileID: 625019524}
+  m_Player: {fileID: 1404455981}
+  m_enemyRaduis: 0.5
 --- !u!4 &1742599219
 Transform:
   m_ObjectHideFlags: 0
@@ -1137,7 +1228,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1742599217}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.7334557, y: 2.0165935, z: -7.981396}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

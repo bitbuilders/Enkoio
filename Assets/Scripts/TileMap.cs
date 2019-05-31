@@ -249,4 +249,9 @@ public class TileMap : MonoBehaviour
     {
         return m_TileTypes;
     }
+
+    public List<Tile> GetTiles()
+    {
+        return m_Tiles;
+    }
 }
