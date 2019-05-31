@@ -142,6 +142,10 @@ public class TileMap : MonoBehaviour
         }
 
         m_Tilemap.RefreshAllTiles();
+        yield return null;
+        Vector2Int p1 = new Vector2Int(m_Bounds.x, m_Bounds.x);
+        Vector2Int p2 = new Vector2Int(m_Bounds.y, m_Bounds.y);
+        StartCoroutine(CreateTiles(p1, p2));
     }
 
     void SetTileAplpha(int index, float alpha)
@@ -180,7 +184,11 @@ public class TileMap : MonoBehaviour
             if (time >= m_SpawnRate)
             {
                 time -= m_SpawnRate;
-                AddTile(new Vector2Int(x, y));
+                IEnumerable<MovingTile> t = null;
+                if (m_MovingTiles.Count > 0)
+                    t = m_MovingTiles.Where(mt => mt.Tile.CellPosition == new Vector2Int(x, y));
+                bool canPlace = (t == null || t.Count() == 0);
+                if (canPlace) AddTile(new Vector2Int(x, y));
                 if (y >= p1.y)
                 {
                     y--;
@@ -191,6 +199,7 @@ public class TileMap : MonoBehaviour
                     }
                 }
                 count++;
+                if (!canPlace) continue;
             }
 
             if (count < size) yield return null;
