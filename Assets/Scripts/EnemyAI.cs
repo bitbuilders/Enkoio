@@ -16,7 +16,7 @@ public class EnemyAI : MonoBehaviour
     {
         return m_elemntType;
     }
-    private void Start()
+    private void Awake()
     {
         m_attackTimer = m_attackTimer + Random.Range(0f, m_attackTimer / 2);
     }

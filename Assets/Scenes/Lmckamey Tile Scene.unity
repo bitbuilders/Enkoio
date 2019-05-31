@@ -1080,7 +1080,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_ViewSize: 5
+  m_ViewSize: 3
   m_SpawnRate: 0.035
   m_SpawnHeight: 5
   m_ChildHeight: 0.5
@@ -1090,12 +1090,12 @@ MonoBehaviour:
   - Type: 1
     Tile: {fileID: 11400000, guid: 64008a04f291e2e49bc3b8708e5a6f86, type: 2}
     Child: {fileID: 171364, guid: f9e8de9a259544d4abf62f44ee21bf37, type: 3}
-    Occurrence: 0.8
+    Occurrence: 0.4
     Current: 0
   - Type: 2
     Tile: {fileID: 11400000, guid: f9bf9f69653c6ec45a65223644d5a18c, type: 2}
     Child: {fileID: 1955266975757903165, guid: 1a226ea6a28fcef458b1f52979b5c795, type: 3}
-    Occurrence: 0.2
+    Occurrence: 0.6
     Current: 0
 --- !u!1 &1120604838
 GameObject:

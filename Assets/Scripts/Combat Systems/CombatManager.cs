@@ -21,14 +21,11 @@ public class CombatManager : MonoBehaviour
 
     public bool CheckIfEnemyTapped(Vector3 tapPosition)
     {
-        print("CheckIfEnemyTapped");
         Vector3 tapPosInWorldSpace = Camera.main.ScreenToWorldPoint(tapPosition);
-        print("Tap Position in World Space" + tapPosInWorldSpace);
         tapPosInWorldSpace.z = 0.0f;
         for (int i = 0; i < m_enemies.Count; i++)
         {
             float distance = Vector3.SqrMagnitude(m_enemies[i].transform.position - tapPosInWorldSpace);
-            print("" + distance + "  " + i);
             if (distance <= (m_enemyRaduis * m_enemyRaduis))
             {
                 Health enemyHealth = m_enemies[i].GetComponent<Health>();
@@ -40,7 +37,13 @@ public class CombatManager : MonoBehaviour
                     enemyHealth.TakeDamage(damamge, playerElement, enemyElement);
                 }
                 if (!enemyHealth.IsAlive())
+                {
                     m_enemies.Remove(m_enemies[i]);
+                    if(m_enemies.Count == 0)
+                    {
+                        //end the game and go back to the main 
+                    }
+                }
                 return true;
             }
         }
@@ -53,7 +56,6 @@ public class CombatManager : MonoBehaviour
         var enemies = FindObjectsOfType<EnemyAI>();
         for (int i = 0; i < enemies.Length; i++)
         {
-            print(enemies[i]);
             m_enemies.Add(enemies[i]);
         }
     }
