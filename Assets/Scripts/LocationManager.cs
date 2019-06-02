@@ -164,6 +164,8 @@ public class LocationManager : MonoBehaviour
 
     private void UpdateInformation()
     {
+        if (!DEBUGGING) return;
+
         LatitudeText.text = $"Latitude: {currentLocationInfo.latitude}";
         LongitudeText.text = $"Longitude: {currentLocationInfo.longitude}";
         InformationText.text = $"Distance from start: {totalDistanceTraveled} \n" +
