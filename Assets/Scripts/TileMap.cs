@@ -445,4 +445,14 @@ public class TileMap : MonoBehaviour
         // Column 3 is apparently position
         return m_Tilemap.GetTransformMatrix((Vector3Int)tile).GetColumn(3);
     }
+
+    public List<TileType> GetTileTypes()
+    {
+        return m_TileTypes;
+    }
+
+    public List<Tile> GetTiles()
+    {
+        return m_Tiles;
+    }
 }
