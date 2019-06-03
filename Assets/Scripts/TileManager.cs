@@ -53,6 +53,7 @@ public class TileManager : Singleton<TileManager>
         {
             m_LastTilePos = m_Debug ? m_Distance : LocationManager.Instance.position;
             // JUMP ENKO JUMP
+            Enko.Instance.Jump();
         }
     }
     
