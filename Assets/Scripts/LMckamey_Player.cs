@@ -28,6 +28,7 @@ public class LMckamey_Player : MonoBehaviour
         m_spriteRenderer.color = colors.airColor;
     }
 
+
     public void SwitchElement(bool swipedLeft)
     {
         m_currentElementType = GetNextEnum(swipedLeft);
