@@ -18,3 +18,8 @@ public enum TileAttribute
     CASTLE,
     HOME
 }
+
+public enum eItem
+{
+    Potion
+}

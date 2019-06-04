@@ -39,6 +39,7 @@ public class Enko : Singleton<Enko>
         }
     }
 
+    public Vector2 SpritePosition { get { return m_SpriteRenderer.transform.position; } }
     public int Damage { get { return m_Damage; } }
     public int Health { get { return m_Health; } }
     public eElementType Element { get; private set; }
@@ -62,6 +63,8 @@ public class Enko : Singleton<Enko>
     private void Start()
     {
         m_Inventory = GetComponentInChildren<Inventory>();
+        m_Inventory.Init(gameObject);
+
         m_SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         m_ElementCount = Enum.GetNames(typeof(eElementType)).Length;
@@ -150,7 +153,7 @@ public class Enko : Singleton<Enko>
         if (touch.phase == TouchPhase.Began)
         {
             m_TouchPosition = touch.position;
-            Vector2 dirToSelf = Camera.main.WorldToScreenPoint(m_SpriteRenderer.transform.position) - 
+            Vector2 dirToSelf = Camera.main.WorldToScreenPoint(SpritePosition) - 
                 (Vector3)m_TouchPosition;
             m_TargetTooFar = dirToSelf.sqrMagnitude > m_TargetDistance * m_TargetDistance;
             m_TouchTime = 0.0f;
