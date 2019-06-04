@@ -587,23 +587,38 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_ViewSize: 5
+  m_ViewSize: 7
   m_SpawnRate: 0.035
-  m_SpawnHeight: 5
+  m_SpawnHeight: 3
   m_ChildHeight: 0.5
-  m_ChildSpawnDelay: 1.25
-  m_FallSpeed: 1.25
+  m_ChildSpawnDelay: 1.2
+  m_FallSpeed: 2
   m_TileTypes:
   - Type: 0
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 6552486187829298160, guid: bac3c2df15e6b13478d8382d504bdc9f, type: 3}
-    Occurrence: 0.5
-    Current: 0
+    Occurrence: 0.1
+    Current: 0.051086158
   - Type: 1
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 0}
-    Occurrence: 0.5
-    Current: 0
+    Occurrence: 1
+    Current: 0.13027598
+  - Type: 1
+    Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
+    Child: {fileID: 1996653378961930296, guid: eb4a4cb14a83a7d4186331197b7959ec, type: 3}
+    Occurrence: 0.05
+    Current: 0.0051511596
+  - Type: 1
+    Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
+    Child: {fileID: 395601572100327561, guid: d2a6fa952ee20fc4691efacb694dd9e8, type: 3}
+    Occurrence: 0.2
+    Current: 0.17632397
+  - Type: 1
+    Tile: {fileID: 11400000, guid: 4faf4bf2582276e439fedc46ed7214a9, type: 2}
+    Child: {fileID: 0}
+    Occurrence: 0.4
+    Current: 0.17632397
 --- !u!1 &1745007488
 GameObject:
   m_ObjectHideFlags: 0
