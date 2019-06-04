@@ -21,16 +21,23 @@ public class Grid : MonoBehaviour
 
     void Start()
     {
-        
+        transform = GetComponent<RectTransform>();
     }
 
     void Update()
     {
         LocationManager locationManager = LocationManager.Instance;
-        xPosOnGrid = Mathf.RoundToInt((locationManager.position.x / 10.0f) * transform.rect.width / 7.0f);
-        yPosOnGrid = Mathf.RoundToInt((locationManager.position.y / 10.0f) * transform.rect.height / 7.0f);
-        player.transform.position = new Vector3(xPosOnGrid, yPosOnGrid);
-        positionText.text = $"({xPosOnGrid}, {yPosOnGrid})";
-        
+        xPosOnGrid = Mathf.RoundToInt((locationManager.position.x / 10.0f) * (transform.rect.width / 7.0f));
+        yPosOnGrid = Mathf.RoundToInt((locationManager.position.y / 10.0f) * (transform.rect.height / 7.0f));
+        if (player != null)
+        {
+            player.transform.position = new Vector3(xPosOnGrid, yPosOnGrid);
+            positionText.text = $"({xPosOnGrid}, {yPosOnGrid})";
+        }
+        else
+        {
+            positionText.text = "I am here";
+        }
+       
     }
 }
