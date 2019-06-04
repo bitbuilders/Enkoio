@@ -16,10 +16,12 @@ public class Enko : Singleton<Enko>
     [SerializeField] TextMeshProUGUI m_TouchInfo = null;
     [SerializeField] TextMeshProUGUI m_SwipeInfo = null;
     [SerializeField] AnimationCurve m_SwapCurve = null;
+    [SerializeField] [Range(0, 100)] int m_Damage = 20;
+    [SerializeField] [Range(0, 100)] int m_Health = 100;
     [SerializeField] [Range(0.0f, 10.0f)] float m_ElementSwapSpeed = 1.5f;
     [SerializeField] [Range(0.0f, 2.0f)] float m_SwipeTime = 1.0f;
     [SerializeField] [Range(0.0f, 50.0f)] float m_SwipeDistance = 10.0f;
-    [SerializeField] [Range(0.0f, 50.0f)] float m_TargetDistance = 10.0f;
+    [SerializeField] [Range(0.0f, 1000.0f)] float m_TargetDistance = 150.0f;
     [SerializeField] [Range(0.0f, 1.0f)] float m_VerticalLeeway = 0.25f;
     [SerializeField] [Range(0.0f, 1.0f)] float m_HorizontalLeeway = 0.25f;
     [SerializeField] ElementData[] m_ElementData = null;
@@ -37,6 +39,8 @@ public class Enko : Singleton<Enko>
         }
     }
 
+    public int Damage { get { return m_Damage; } }
+    public int Health { get { return m_Health; } }
     public eElementType Element { get; private set; }
     public bool RightSwipe { get; private set; }
     public bool LeftSwipe { get; private set; }
@@ -51,6 +55,7 @@ public class Enko : Singleton<Enko>
     float m_TouchTime;
     int m_CurrentElement;
     int m_ElementCount;
+    int m_MaxHealth;
     bool m_InCombat;
     bool m_TargetTooFar;
 
@@ -69,6 +74,7 @@ public class Enko : Singleton<Enko>
 
         m_CurrentElement = 0;
         Element = (eElementType)m_CurrentElement;
+        m_MaxHealth = m_Health;
     }
 
     private void Update()
@@ -144,7 +150,8 @@ public class Enko : Singleton<Enko>
         if (touch.phase == TouchPhase.Began)
         {
             m_TouchPosition = touch.position;
-            Vector2 dirToSelf = Camera.main.WorldToScreenPoint(transform.position) - (Vector3)m_TouchPosition;
+            Vector2 dirToSelf = Camera.main.WorldToScreenPoint(m_SpriteRenderer.transform.position) - 
+                (Vector3)m_TouchPosition;
             m_TargetTooFar = dirToSelf.sqrMagnitude > m_TargetDistance * m_TargetDistance;
             m_TouchTime = 0.0f;
         }
@@ -168,6 +175,7 @@ public class Enko : Singleton<Enko>
             {
                 LeftSwipe = true;
             }
+            m_TouchTime = m_SwipeTime;
         }
         if (Mathf.Abs(m_TouchDir.x) < m_HorizontalLeeway)
         {
@@ -181,6 +189,7 @@ public class Enko : Singleton<Enko>
             {
                 DownSwipe = true;
             }
+            m_TouchTime = m_SwipeTime;
         }
     }
 
@@ -196,16 +205,14 @@ public class Enko : Singleton<Enko>
     {
         if (m_TouchInfo)
         {
-            string debug = "T-Start: {0} | T-Dir: {1} | T-Time: {2} | Too Far: {3}";
-            m_TouchInfo.text = string.Format(debug, m_TouchPosition, m_TouchDir, m_TouchTime, m_TargetTooFar);
+            string debug = "T-Start: {0} | T-Dir: {1} | Too Far: {2}";
+            m_TouchInfo.text = string.Format(debug, m_TouchPosition, m_TouchDir, m_TargetTooFar);
         }
-        else m_TouchInfo.text = "Touch Info Text Not Set";
         
         if (m_SwipeInfo)
         {
             string swipe = "S-Right: {0} | S-Left: {1} | S-Up: {2} | S-Down: {3}";
             m_SwipeInfo.text = string.Format(swipe, RightSwipe, LeftSwipe, UpSwipe, DownSwipe);
         }
-        else m_TouchInfo.text = "Swipe Info Text Not Set";
     }
 }
