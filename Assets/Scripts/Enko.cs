@@ -75,6 +75,8 @@ public class Enko : Singleton<Enko>
     {
         UpdateSwipe();
 
+        UpdateTap();
+
         UpdateElement();
 
         UpdateInventory();
@@ -96,6 +98,28 @@ public class Enko : Singleton<Enko>
         else if (DownSwipe)
         {
             m_Inventory.Close();
+        }
+    }
+
+    void UpdateTap()
+    {
+        Vector3 touchStart = Vector3.zero;
+        Vector3 touchEnd = Vector3.one;
+        if (Input.touches.Length > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                m_TouchPosition = touch.position;
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                touchEnd = touch.position;
+                if (Mathf.Abs(m_TouchPosition.x - touchEnd.x) < 20 && Mathf.Abs(m_TouchPosition.y - touchEnd.y) < 20)
+                {
+                    CombatManager.Instance.CheckIfEnemyTapped(touch.position);
+                }
+            }
         }
     }
 
@@ -159,7 +183,7 @@ public class Enko : Singleton<Enko>
         if (Mathf.Abs(m_TouchDir.y) < m_VerticalLeeway)
         {
             float dot = Vector2.Dot(m_TouchDir, Vector2.right);
-            
+
             if (dot > 0.0f) // Right
             {
                 RightSwipe = true;
@@ -172,7 +196,7 @@ public class Enko : Singleton<Enko>
         if (Mathf.Abs(m_TouchDir.x) < m_HorizontalLeeway)
         {
             float dot = Vector2.Dot(m_TouchDir, Vector2.up);
-            
+
             if (dot > 0.0f) // Up
             {
                 UpSwipe = true;
@@ -199,13 +223,13 @@ public class Enko : Singleton<Enko>
             string debug = "T-Start: {0} | T-Dir: {1} | T-Time: {2} | Too Far: {3}";
             m_TouchInfo.text = string.Format(debug, m_TouchPosition, m_TouchDir, m_TouchTime, m_TargetTooFar);
         }
-        else m_TouchInfo.text = "Touch Info Text Not Set";
-        
+        //else m_TouchInfo.text = "Touch Info Text Not Set";
+
         if (m_SwipeInfo)
         {
             string swipe = "S-Right: {0} | S-Left: {1} | S-Up: {2} | S-Down: {3}";
             m_SwipeInfo.text = string.Format(swipe, RightSwipe, LeftSwipe, UpSwipe, DownSwipe);
         }
-        else m_TouchInfo.text = "Swipe Info Text Not Set";
+        //else m_TouchInfo.text = "Swipe Info Text Not Set";
     }
 }

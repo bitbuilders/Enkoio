@@ -19,6 +19,7 @@ public class EnemyAI : MonoBehaviour
     private void Awake()
     {
         m_attackTimer = m_attackTimer + Random.Range(0f, m_attackTimer / 2);
+        m_target = FindObjectOfType<Enko>().gameObject;
     }
 
     private void Update()
@@ -26,7 +27,7 @@ public class EnemyAI : MonoBehaviour
         m_attackTimeElapsed += Time.deltaTime;
         if (m_attackTimeElapsed >= m_attackTimer)
         {
-            //Attack();
+            Attack();
         }
     }
 
