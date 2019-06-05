@@ -8,7 +8,7 @@ using UnityEngine;
 public struct ElementData
 {
     public eElementType Element;
-    public Color Color;
+    public Sprite Sprite;
 }
 
 public class Enko : Singleton<Enko>
@@ -19,6 +19,7 @@ public class Enko : Singleton<Enko>
     [SerializeField] [Range(0, 100)] int m_Damage = 20;
     [SerializeField] [Range(0, 100)] int m_Health = 100;
     [SerializeField] [Range(0.0f, 10.0f)] float m_ElementSwapSpeed = 1.5f;
+    [SerializeField] Vector3 m_SquishScale = new Vector3(0.8f, 0.5f, 1.0f);
     [SerializeField] [Range(0.0f, 2.0f)] float m_SwipeTime = 1.0f;
     [SerializeField] [Range(0.0f, 50.0f)] float m_SwipeDistance = 10.0f;
     [SerializeField] [Range(0.0f, 1000.0f)] float m_TargetDistance = 150.0f;
@@ -48,7 +49,7 @@ public class Enko : Singleton<Enko>
     public bool UpSwipe { get; private set; }
     public bool DownSwipe { get; private set; }
 
-    Dictionary<eElementType, Color> m_ElementColors;
+    Dictionary<eElementType, Sprite> m_ElementSprites;
     Inventory m_Inventory;
     SpriteRenderer m_SpriteRenderer;
     Vector2 m_TouchPosition;
@@ -69,10 +70,10 @@ public class Enko : Singleton<Enko>
 
         m_ElementCount = Enum.GetNames(typeof(eElementType)).Length;
 
-        m_ElementColors = new Dictionary<eElementType, Color>();
+        m_ElementSprites = new Dictionary<eElementType, Sprite>();
         foreach (ElementData data in m_ElementData)
         {
-            m_ElementColors[data.Element] = data.Color;
+            m_ElementSprites[data.Element] = data.Sprite;
         }
 
         m_CurrentElement = 0;
@@ -83,6 +84,12 @@ public class Enko : Singleton<Enko>
     private void Update()
     {
         UpdateSwipe();
+
+        InCombat = true; // REMOVE ME WHEN IM DONE DEBUGGING
+        if (Input.GetKeyDown(KeyCode.UpArrow)) UpSwipe = true;
+        if (Input.GetKeyDown(KeyCode.DownArrow)) DownSwipe = true;
+        if (Input.GetKeyDown(KeyCode.RightArrow)) RightSwipe = true;
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) LeftSwipe = true;
 
         UpdateElement();
 
@@ -111,8 +118,7 @@ public class Enko : Singleton<Enko>
     void UpdateElement()
     {
         if (!RightSwipe && !LeftSwipe) return;
-
-        Color prevColor = m_ElementColors[Element];
+        
         if (RightSwipe)
         {
             m_CurrentElement--;
@@ -126,20 +132,31 @@ public class Enko : Singleton<Enko>
             Element = (eElementType)m_CurrentElement;
         }
 
-        StartCoroutine(ElementLerp(prevColor, m_ElementColors[Element], m_ElementSwapSpeed));
+        StopCoroutine("ElementLerp");
+        StartCoroutine(ElementLerp(transform.localScale, m_SquishScale, m_ElementSwapSpeed));
     }
 
-    IEnumerator ElementLerp(Color start, Color end, float speed)
+    IEnumerator ElementLerp(Vector3 start, Vector3 end, float speed)
     {
+        float last = 0.0f;
         for (float i = 0.0f; i <= 1.0f; i += Time.deltaTime * speed)
         {
+            if (i >= 0.5f && last < 0.5f) SwapSprite();
+
             float t = m_SwapCurve.Evaluate(i);
-            Color c = Color.LerpUnclamped(start, end, t);
-            m_SpriteRenderer.color = c;
+            Vector3 s = Vector3.LerpUnclamped(start, end, t);
+            m_SpriteRenderer.transform.localScale = s;
+
+            last = i;
             yield return null;
         }
 
-        m_SpriteRenderer.color = end;
+        m_SpriteRenderer.transform.localScale = start;
+    }
+
+    void SwapSprite()
+    {
+        m_SpriteRenderer.sprite = m_ElementSprites[Element];
     }
 
     void UpdateSwipe()

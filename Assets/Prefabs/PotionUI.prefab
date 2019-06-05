@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1684846302330167723}
   - component: {fileID: 1684846302330167722}
   m_Layer: 5
-  m_Name: Potion
+  m_Name: PotionUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50,6 +50,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b1d2ec6c9aada47ba2d4cd93a6c2de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_ItemTemplate: {fileID: 1020286268042018073, guid: c1f6d07716dd77640b595e36466cb41c,
+    type: 3}
+  m_MaxDistance: 1
+  m_MinDistance: 0.2
+  m_ItemSize: 0.2
+  m_ForceAmplifier: 500
+  m_MaxForce: 150
 --- !u!222 &1684846302330167723
 CanvasRenderer:
   m_ObjectHideFlags: 0

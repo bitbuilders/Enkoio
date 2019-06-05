@@ -17,6 +17,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] AnimationCurve m_OpenCurve = null;
     [SerializeField] AnimationCurve m_CloseCurve = null;
     [SerializeField] [Range(0.0f, 5.0f)] float m_InventorySpeed = 2.0f;
+    [SerializeField] [Range(0.0f, 2.0f)] float m_InventoryOffset = 0.35f;
     [SerializeField] [Range(10, 200)] int m_InventoryHeight = 100;
     [SerializeField] List<ItemInfo> m_ItemInfo = null;
 
@@ -30,27 +31,35 @@ public class Inventory : MonoBehaviour
         foreach (ItemInfo item in m_ItemInfo)
         {
             GameObject go = Instantiate(item.ItemTemplate, m_InventoryContent);
-            Item i = go.GetComponent<Item>();
+            InventoryItem i = go.GetComponent<InventoryItem>();
             i.Init(this, item.Count, item.Type);
+            TouchManager.Instance.RegisterTouchable(i);
         }
         Close();
+    }
+
+    private void LateUpdate()
+    {
+        m_InventoryUI.transform.position = Enko.Instance.transform.position + Vector3.up * m_InventoryOffset;
     }
 
     public void Open()
     {
         int cH = (int)m_InventoryUI.sizeDelta.y;
+        StopAllCoroutines();
         StartCoroutine(ScaleHeight(cH, m_InventoryHeight, m_InventorySpeed, true));
     }
 
     public void Close()
     {
         int cH = (int)m_InventoryUI.sizeDelta.y;
+        StopAllCoroutines();
         StartCoroutine(ScaleHeight(cH, 0, m_InventorySpeed, false));
     }
 
     public void RemoveItem(eItem type)
     {
-        Item[] children = m_InventoryContent.GetComponentsInChildren<Item>();
+        InventoryItem[] children = m_InventoryContent.GetComponentsInChildren<InventoryItem>();
         for (int i = 0; i < children.Length; i++)
         {
             if (children[i].Type == type)

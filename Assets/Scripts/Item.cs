@@ -4,21 +4,39 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    public Inventory Inventory { get; set; }
-    public eItem Type { get; set; }
-    public int Count { get; set; }
+    [SerializeField] [Range(0.0f, 5.0f)] float m_Lifetime = 0.5f;
+    [SerializeField] [Range(-5.0f, 5.0f)] float m_YKill = -0.8f;
+    [SerializeField] [Range(-10.0f, 10.0f)] float m_Gravity = 1.0f;
 
-    public void Init(Inventory inventory, int count, eItem type)
+    protected Rigidbody2D m_RigidBody;
+    float m_Time;
+    bool m_Thrown;
+
+    private void Awake()
     {
-        Inventory = inventory;
-        Count = count;
-        Type = type;
+        m_RigidBody = GetComponent<Rigidbody2D>();
     }
 
-    public void Use()
+    virtual public void Use(Vector2 force)
     {
-        // TODO: Use inventory's owner to get position for animation
+        m_RigidBody.gravityScale = m_Gravity;
+        m_RigidBody.AddForce(force);
+        m_Thrown = true;
+    }
 
+    private void Update()
+    {
+        if (!m_Thrown) return;
 
+        m_Time += Time.deltaTime;
+        if (m_Time > m_Lifetime || transform.position.y < m_YKill)
+        {
+            Break();
+        }
+    }
+
+    virtual public void Break()
+    {
+        Destroy(gameObject);
     }
 }
