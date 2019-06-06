@@ -60,7 +60,7 @@ public class LocationManager : MonoBehaviour
             yield break;
         }
 
-        Input.location.Start(2.0f, 1.0f);
+        Input.location.Start(0.0f, 0.0f);
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {

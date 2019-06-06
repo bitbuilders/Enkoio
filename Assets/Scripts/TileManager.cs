@@ -6,6 +6,7 @@ using TMPro;
 public class TileManager : Singleton<TileManager>
 {
     [SerializeField] TileMap m_Overworld = null;
+    [SerializeField] [Range(1, 10)] int m_MetersPerTile = 3;
     [SerializeField] [Range(0.0f, 10.0f)] float m_DebugIterationDistance = 1.0f;
     [SerializeField] [Range(0.0f, 10.0f)] float m_DebugIterationTime = 3.0f;
     [SerializeField] bool m_Debug = false;
@@ -49,7 +50,7 @@ public class TileManager : Singleton<TileManager>
         string debug = "From Center: {0}";
         if (m_FromCenterText) m_FromCenterText.text = string.Format(debug, posToMove);
 
-        if (m_Overworld.MoveTo(posToMove))
+        if (m_Overworld.MoveTo(posToMove / (float)m_MetersPerTile))
         {
             m_LastTilePos = m_Debug ? m_Distance : LocationManager.Instance.position;
             // JUMP ENKO JUMP
