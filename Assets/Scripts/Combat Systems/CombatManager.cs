@@ -10,13 +10,24 @@ public class CombatManager : Singleton<CombatManager>
 
     [SerializeField] Enko m_Player = default;
     [SerializeField] float m_enemyRaduis = 2.0f;
+    [SerializeField] GameObject m_combatTileMap = default;
+    [SerializeField] Transform m_GridTransform = default;
 
     private int numOfEnemies = 0;
+    private TileMap m_tileMap = default;
 
 
     private void Awake()
     {
         StartCoroutine(FindAllEnemiesInScene());
+    }
+
+
+    public void NewBattle()
+    {
+        GameObject go = Instantiate(m_combatTileMap, m_GridTransform);
+        m_tileMap = go.GetComponent<TileMap>();
+        TileManager.Instance.HideTileMap();
     }
 
     public bool CheckIfEnemyTapped(Vector3 tapPosition)
@@ -42,13 +53,22 @@ public class CombatManager : Singleton<CombatManager>
                     m_enemies.Remove(m_enemies[i]);
                     if(m_enemies.Count == 0)
                     {
-                        //end the game and go back to the main 
+                        EndBattle();
                     }
                 }
                 return true;
             }
         }
         return false;
+    }
+
+    public void EndBattle()
+    {
+        //Show the world map
+        TileManager.Instance.ShowTileMap();
+        //hide the combat map and set it to null
+        m_tileMap.Hide();
+        m_tileMap = null;
     }
 
     IEnumerator FindAllEnemiesInScene()

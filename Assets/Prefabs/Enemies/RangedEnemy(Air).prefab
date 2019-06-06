@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1955266975757903166}
   - component: {fileID: 1955266975757903161}
   m_Layer: 0
-  m_Name: MeleeEnemy(Water)
+  m_Name: RangedEnemy(Air)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -70,7 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 9ef534cdcaf35bd43bd6263a72aa4e7a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0666950283a729a4aaa96760e12857f1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -111,4 +111,4 @@ MonoBehaviour:
   m_missChance: 0
   m_damage: 10
   m_target: {fileID: 0}
-  m_elemntType: 2
+  m_elemntType: 3
