@@ -26,7 +26,7 @@ public class EnemyAI : MonoBehaviour
         {
             Attack();
             Health playerHealth = Enko.Instance.GetComponent<Health>();
-            if (!playerHealth.IsAlive())
+            if (playerHealth && !playerHealth.IsAlive())
             {
                 CombatManager.Instance.EndBattle();
                 playerHealth.ResetHealth();
