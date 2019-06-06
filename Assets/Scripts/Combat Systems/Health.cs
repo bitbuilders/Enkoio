@@ -38,6 +38,16 @@ public class Health : MonoBehaviour
         }
     }
 
+    public void ResetHealth()
+    {
+        m_currentHealthPoints = m_maxHealthPoints;
+    }
+
+    public int GetMaxHealth()
+    {
+        return m_maxHealthPoints;
+    }
+
     public void ResetHealthToMax()
     {
         m_currentHealthPoints = m_maxHealthPoints;

@@ -127,7 +127,7 @@ public class Enko : Singleton<Enko>
             else if (touch.phase == TouchPhase.Ended)
             {
                 touchEnd = touch.position;
-                if (Mathf.Abs(m_TouchPosition.x - touchEnd.x) < 20 && Mathf.Abs(m_TouchPosition.y - touchEnd.y) < 20)
+                if (Mathf.Abs(m_TouchPosition.x - touchEnd.x) < 25 && Mathf.Abs(m_TouchPosition.y - touchEnd.y) < 25)
                 {
                     CombatManager.Instance.CheckIfEnemyTapped(touch.position);
                 }
