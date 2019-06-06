@@ -85,7 +85,6 @@ public class Enko : Singleton<Enko>
         UpdateSwipe();
 
         UpdateTap();
-        InCombat = true; // REMOVE ME WHEN IM DONE DEBUGGING
         if (Input.GetKeyDown(KeyCode.UpArrow)) UpSwipe = true;
         if (Input.GetKeyDown(KeyCode.DownArrow)) DownSwipe = true;
         if (Input.GetKeyDown(KeyCode.RightArrow)) RightSwipe = true;

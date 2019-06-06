@@ -21,8 +21,6 @@ public class Healthbar : MonoBehaviour
         m_Target = (float)Enko.Instance.Health.Current / (float)Enko.Instance.Health.GetMaxHealth();
         m_Current = Mathf.Lerp(m_Current, m_Target, Time.deltaTime * m_Speed);
 
-        print(m_Current);
-
         m_Slider.value = m_Current;
     }
 }

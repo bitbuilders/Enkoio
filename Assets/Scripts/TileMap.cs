@@ -71,7 +71,7 @@ public class TileMap : MonoBehaviour
         StartCoroutine(CreateTiles(p1, p2));
     }
 
-    public void Hide()
+    public void Hide(bool destroyOnComplete)
     {
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {
@@ -85,10 +85,10 @@ public class TileMap : MonoBehaviour
 
         float time = 1.0f / m_FadeSpeed;
         float delay = 0.1f;
-        StartCoroutine(FadeTiles(time - delay, delay, false));
+        StartCoroutine(FadeTiles(time - delay, delay, false, destroyOnComplete));
     }
 
-    IEnumerator FadeTiles(float time, float delay, bool fadeIn)
+    IEnumerator FadeTiles(float time, float delay, bool fadeIn, bool destroyOnComplete)
     {
         yield return new WaitForSeconds(delay);
 
@@ -104,15 +104,26 @@ public class TileMap : MonoBehaviour
             yield return null;
         }
 
-        for (int i = 0; i < m_MovingTiles.Count; i++)
+        if (destroyOnComplete)
         {
-            float alpha = fadeIn ? 1.0f : 0.0f;
-            SetTileAplpha(i, alpha);
-            if (m_MovingTiles[i].Child) SetChildAlpha(m_MovingTiles[i].SpriteRenderer, alpha);
+            for (int i = 0; i < m_MovingTiles.Count; i++)
+            {
+                if (m_MovingTiles[i].Child) Destroy(m_MovingTiles[i].Child);
+            }
+            Destroy(gameObject);
         }
-        m_Tilemap.RefreshAllTiles();
+        else
+        {
+            for (int i = 0; i < m_MovingTiles.Count; i++)
+            {
+                float alpha = fadeIn ? 1.0f : 0.0f;
+                SetTileAplpha(i, alpha);
+                if (m_MovingTiles[i].Child) SetChildAlpha(m_MovingTiles[i].SpriteRenderer, alpha);
+            }
+            m_Tilemap.RefreshAllTiles();
 
-        if (!fadeIn) SetInactive();
+            if (!fadeIn) SetInactive();
+        }
     }
 
     public void RiseUp()
@@ -130,7 +141,7 @@ public class TileMap : MonoBehaviour
         }
 
         float time = 1.0f / m_FadeSpeed;
-        StartCoroutine(FadeTiles(time, 0.0f, true));
+        StartCoroutine(FadeTiles(time, 0.0f, true, false));
     }
 
     void SetInactive()
@@ -154,7 +165,7 @@ public class TileMap : MonoBehaviour
         }
 
         float time = 1.0f / m_FadeSpeed;
-        StartCoroutine(FadeTiles(time, 0.0f, true));
+        StartCoroutine(FadeTiles(time, 0.0f, true, false));
     }
 
     public bool MoveTo(Vector2 worldPos)
@@ -361,7 +372,7 @@ public class TileMap : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) Hide();
+        if (Input.GetKeyDown(KeyCode.Space)) Hide(false);
 
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {

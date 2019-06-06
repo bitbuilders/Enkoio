@@ -27,7 +27,7 @@ public class TileManager : Singleton<TileManager>
 
     public void HideTileMap()
     {
-        m_Overworld.Hide();
+        m_Overworld.Hide(false);
     }
 
     public void ShowTileMap()

@@ -22,6 +22,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public void NewBattle()
     {
+        Enko.Instance.InCombat = true;
         gameObject.SetActive(true);
         GameObject go = Instantiate(m_combatTileMap, m_GridTransform);
         m_tileMap = go.GetComponent<TileMap>();
@@ -61,11 +62,12 @@ public class CombatManager : Singleton<CombatManager>
 
     public void EndBattle()
     {
+        Enko.Instance.InCombat = false;
         gameObject.SetActive(false);
         //Show the world map
         TileManager.Instance.ShowTileMap();
         //hide the combat map and set it to null
-        m_tileMap.Hide();
+        m_tileMap.Hide(true);
         m_tileMap = null;
 
         EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
