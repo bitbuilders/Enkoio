@@ -56,7 +56,7 @@ MonoBehaviour:
   m_MinDistance: 0.1
   m_ItemSize: 0.2
   m_ForceAmplifier: 500
-  m_MaxForce: 150
+  m_MaxForce: 350
 --- !u!222 &1684846302330167723
 CanvasRenderer:
   m_ObjectHideFlags: 0

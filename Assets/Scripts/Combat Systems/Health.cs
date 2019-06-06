@@ -8,6 +8,8 @@ public class Health : MonoBehaviour
     [SerializeField] int m_currentHealthPoints = 100;
     [SerializeField] bool m_DestroyOnDeath = true;
 
+    public int Current { get { return m_currentHealthPoints; } }
+
     public bool IsAlive()
     {
         return m_currentHealthPoints > 0;
