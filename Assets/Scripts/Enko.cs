@@ -42,7 +42,7 @@ public class Enko : Singleton<Enko>
 
     public Vector2 SpritePosition { get { return m_SpriteRenderer.transform.position; } }
     public int Damage { get { return m_Damage; } }
-    public int Health { get { return m_Health; } }
+    public int Health { get { return m_Health; } set { m_Health = value; } }
     public eElementType Element { get; private set; }
     public bool RightSwipe { get; private set; }
     public bool LeftSwipe { get; private set; }
