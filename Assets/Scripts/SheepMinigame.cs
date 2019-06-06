@@ -6,15 +6,20 @@ public class SheepMinigame : MonoBehaviour
 {
 
     [SerializeField]
-    BoxCollider2D spawnArea;
+    BoxCollider2D spawnArea = null;
 
     [SerializeField]
-    Sheep sheepPrefab;
+    BoxCollider2D endArea = null;
+
+    [SerializeField]
+    GameObject sheepPrefab = null;
+
+    int numCollected = 0;
 
     void Start()
     {
-        Sheep sheep = GameObject.Instantiate(sheepPrefab, RandomPointInBounds2D(spawnArea.bounds), Quaternion.identity);
-
+        GameObject sheep = GameObject.Instantiate(sheepPrefab, RandomPointInBounds2D(spawnArea.bounds), Quaternion.identity);
+        sheep.GetComponentInChildren<Sheep>().endPosition = RandomPointInBounds2D(endArea.bounds);
     }
 
     void Update()

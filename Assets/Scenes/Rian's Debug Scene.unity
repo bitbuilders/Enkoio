@@ -1815,7 +1815,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnArea: {fileID: 1484664646}
-  sheepPrefab: {fileID: 8375533934795992184, guid: 7785ae07cadf6634881f97c2abbb66ba,
+  endArea: {fileID: 1881181194}
+  sheepPrefab: {fileID: 6782773070206060452, guid: 7785ae07cadf6634881f97c2abbb66ba,
     type: 3}
 --- !u!4 &1220484755
 Transform:
@@ -2530,7 +2531,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.0001, y: 5}
+  m_Size: {x: 0.01, y: 5}
   m_EdgeRadius: 0
 --- !u!4 &1484664647
 Transform:
@@ -2881,7 +2882,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.0001, y: 5}
+  m_Size: {x: 0.01, y: 5}
   m_EdgeRadius: 0
 --- !u!1 &1900535614
 GameObject:
