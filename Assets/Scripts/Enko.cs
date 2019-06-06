@@ -40,6 +40,7 @@ public class Enko : Singleton<Enko>
     }
 
     public Vector2 SpritePosition { get { return m_SpriteRenderer.transform.position; } }
+    public Health Health { get; private set; }
     public int Damage { get { return m_Damage; } }
     public eElementType Element { get; private set; }
     public bool RightSwipe { get; private set; }
@@ -61,9 +62,10 @@ public class Enko : Singleton<Enko>
 
     private void Start()
     {
-        m_Inventory = GetComponentInChildren<Inventory>();
+        m_Inventory = GetComponent<Inventory>();
         m_Inventory.Init(gameObject);
-
+        
+        Health = GetComponent<Health>();
         m_SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         m_ElementCount = Enum.GetNames(typeof(eElementType)).Length;
@@ -83,7 +85,6 @@ public class Enko : Singleton<Enko>
         UpdateSwipe();
 
         UpdateTap();
-        InCombat = true; // REMOVE ME WHEN IM DONE DEBUGGING
         if (Input.GetKeyDown(KeyCode.UpArrow)) UpSwipe = true;
         if (Input.GetKeyDown(KeyCode.DownArrow)) DownSwipe = true;
         if (Input.GetKeyDown(KeyCode.RightArrow)) RightSwipe = true;

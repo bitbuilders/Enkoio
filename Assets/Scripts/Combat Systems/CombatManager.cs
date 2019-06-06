@@ -5,8 +5,7 @@ using UnityEngine;
 public class CombatManager : Singleton<CombatManager>
 {
     public List<EnemyAI> m_enemies = new List<EnemyAI>();
-
-    [SerializeField] Enko m_Player = default;
+    
     [SerializeField] float m_enemyRaduis = 2.0f;
     [SerializeField] GameObject m_combatTileMap = default;
     [SerializeField] Transform m_GridTransform = default;
@@ -23,6 +22,8 @@ public class CombatManager : Singleton<CombatManager>
 
     public void NewBattle()
     {
+        Enko.Instance.InCombat = true;
+        gameObject.SetActive(true);
         GameObject go = Instantiate(m_combatTileMap, m_GridTransform);
         m_tileMap = go.GetComponent<TileMap>();
         TileManager.Instance.HideTileMap();
@@ -61,11 +62,20 @@ public class CombatManager : Singleton<CombatManager>
 
     public void EndBattle()
     {
+        Enko.Instance.InCombat = false;
+        gameObject.SetActive(false);
         //Show the world map
         TileManager.Instance.ShowTileMap();
         //hide the combat map and set it to null
-        m_tileMap.Hide();
+        m_tileMap.Hide(true);
         m_tileMap = null;
+
+        EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            enemies[i].Active = false;
+            Destroy(enemies[i].gameObject, 0.35f);
+        }
     }
 
     IEnumerator FindAllEnemiesInScene()

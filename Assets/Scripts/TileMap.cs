@@ -44,6 +44,7 @@ public class TileMap : MonoBehaviour
     [SerializeField] [Range(0.0f, 10.0f)] float m_ChildSpawnDelay = 1.5f;
     [SerializeField] [Range(0.0f, 10.0f)] float m_FallSpeed = 1.25f;
     [SerializeField] [Range(0.0f, 10.0f)] float m_FadeSpeed = 2.0f;
+    [SerializeField] bool m_EmptyCenter = false;
     [SerializeField] List<TileType> m_TileTypes = null;
 
     List<Tile> m_Tiles;
@@ -70,7 +71,7 @@ public class TileMap : MonoBehaviour
         StartCoroutine(CreateTiles(p1, p2));
     }
 
-    public void Hide()
+    public void Hide(bool destroyOnComplete)
     {
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {
@@ -84,10 +85,10 @@ public class TileMap : MonoBehaviour
 
         float time = 1.0f / m_FadeSpeed;
         float delay = 0.1f;
-        StartCoroutine(FadeTiles(time - delay, delay, false));
+        StartCoroutine(FadeTiles(time - delay, delay, false, destroyOnComplete));
     }
 
-    IEnumerator FadeTiles(float time, float delay, bool fadeIn)
+    IEnumerator FadeTiles(float time, float delay, bool fadeIn, bool destroyOnComplete)
     {
         yield return new WaitForSeconds(delay);
 
@@ -103,15 +104,26 @@ public class TileMap : MonoBehaviour
             yield return null;
         }
 
-        for (int i = 0; i < m_MovingTiles.Count; i++)
+        if (destroyOnComplete)
         {
-            float alpha = fadeIn ? 1.0f : 0.0f;
-            SetTileAplpha(i, alpha);
-            if (m_MovingTiles[i].Child) SetChildAlpha(m_MovingTiles[i].SpriteRenderer, alpha);
+            for (int i = 0; i < m_MovingTiles.Count; i++)
+            {
+                if (m_MovingTiles[i].Child) Destroy(m_MovingTiles[i].Child);
+            }
+            Destroy(gameObject);
         }
-        m_Tilemap.RefreshAllTiles();
+        else
+        {
+            for (int i = 0; i < m_MovingTiles.Count; i++)
+            {
+                float alpha = fadeIn ? 1.0f : 0.0f;
+                SetTileAplpha(i, alpha);
+                if (m_MovingTiles[i].Child) SetChildAlpha(m_MovingTiles[i].SpriteRenderer, alpha);
+            }
+            m_Tilemap.RefreshAllTiles();
 
-        if (!fadeIn) SetInactive();
+            if (!fadeIn) SetInactive();
+        }
     }
 
     public void RiseUp()
@@ -129,7 +141,7 @@ public class TileMap : MonoBehaviour
         }
 
         float time = 1.0f / m_FadeSpeed;
-        StartCoroutine(FadeTiles(time, 0.0f, true));
+        StartCoroutine(FadeTiles(time, 0.0f, true, false));
     }
 
     void SetInactive()
@@ -153,7 +165,7 @@ public class TileMap : MonoBehaviour
         }
 
         float time = 1.0f / m_FadeSpeed;
-        StartCoroutine(FadeTiles(time, 0.0f, true));
+        StartCoroutine(FadeTiles(time, 0.0f, true, false));
     }
 
     public bool MoveTo(Vector2 worldPos)
@@ -164,10 +176,6 @@ public class TileMap : MonoBehaviour
         if (tile == Vector2Int.zero) return false;
 
         //print("tile: " + tile + " dir: " + dir);
-        IEnumerable<MovingTile> t = null;
-        if (m_MovingTiles.Count > 0)
-            t = m_MovingTiles.Where(mt => mt.Tile.CellPosition - tile == Vector2Int.zero);
-        if (t != null && t.Count() > 0) t.First().Tile.OnEnter();
 
         // Clear board
         m_MovingTiles.ForEach(mt => { m_Tilemap.SetTile((Vector3Int)(mt.Tile.CellPosition + tile), null); });
@@ -188,6 +196,8 @@ public class TileMap : MonoBehaviour
             SetTilePosition(m_MovingTiles[i].Tile.CellPosition, m_MovingTiles[i].TilePath.P1);
             if (m_MovingTiles[i].Child) m_MovingTiles[i].Child.transform.position = m_MovingTiles[i].ChildPath.P1;
         }
+
+        EnterCenterTile();
 
         StartCoroutine(MoveTiles(dir * -1, tile));
 
@@ -282,12 +292,15 @@ public class TileMap : MonoBehaviour
             bool canPlace = false;
             if (time >= m_SpawnRate)
             {
-                time -= m_SpawnRate;
-                IEnumerable<MovingTile> t = null;
-                if (m_MovingTiles.Count > 0)
-                    t = m_MovingTiles.Where(mt => mt.Tile.CellPosition == new Vector2Int(x, y));
-                canPlace = (t == null || t.Count() == 0);
-                if (canPlace) AddTile(new Vector2Int(x, y));
+                if (!m_EmptyCenter || !(m_EmptyCenter && x == -1 && y == -1))
+                {
+                    time -= m_SpawnRate;
+                    IEnumerable<MovingTile> t = null;
+                    if (m_MovingTiles.Count > 0)
+                        t = m_MovingTiles.Where(mt => mt.Tile.CellPosition == new Vector2Int(x, y));
+                    canPlace = (t == null || t.Count() == 0);
+                    if (canPlace) AddTile(new Vector2Int(x, y));
+                }
                 if (y >= p1.y)
                 {
                     y--;
@@ -306,6 +319,7 @@ public class TileMap : MonoBehaviour
 
         float end = Time.time;
         print("Took: " + (end - start) + " seconds to spawn tiles");
+        EnterCenterTile();
 
         // Here lies code that Lucas brutally murdered, do not trust anything he says R.I.P.
     }
@@ -321,8 +335,8 @@ public class TileMap : MonoBehaviour
         UnityEngine.Tilemaps.Tile tileSprite = Instantiate(tt.Tile);
         m_Tilemap.SetTile((Vector3Int)pos, tileSprite);
 
-        Tile tile = new Tile();
-        tile.Init(new TileInfo(pos, tt.Type, m_SpawnCurve, m_ChildCurve, m_FallSpeed, this, tileSprite));
+        TileInfo info = new TileInfo(pos, tt.Type, m_SpawnCurve, m_ChildCurve, m_FallSpeed, this, tileSprite);
+        Tile tile = CreateTile(tt.Type, info);
         tile.OnCreate();
         m_Tiles.Add(tile);
 
@@ -358,7 +372,7 @@ public class TileMap : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) Hide();
+        if (Input.GetKeyDown(KeyCode.Space)) Hide(false);
 
         for (int i = 0; i < m_MovingTiles.Count; i++)
         {
@@ -446,6 +460,14 @@ public class TileMap : MonoBehaviour
         return m_Tilemap.GetTransformMatrix((Vector3Int)tile).GetColumn(3);
     }
 
+    void EnterCenterTile()
+    {
+        IEnumerable<MovingTile> t = null;
+        if (m_MovingTiles.Count > 0)
+            t = m_MovingTiles.Where(mt => mt.Tile.CellPosition == Vector2Int.zero);
+        if (t != null && t.Count() > 0) t.First().Tile.OnEnter();
+    }
+
     public List<TileType> GetTileTypes()
     {
         return m_TileTypes;
@@ -454,5 +476,33 @@ public class TileMap : MonoBehaviour
     public List<Tile> GetTiles()
     {
         return m_Tiles;
+    }
+
+    Tile CreateTile(TileAttribute type, TileInfo info)
+    {
+        Tile tile = null;
+
+        switch (type)
+        {
+            case TileAttribute.SHOP:
+                tile = new Shop();
+                break;
+            case TileAttribute.MYSTERY:
+                tile = new Mystery();
+                break;
+            case TileAttribute.BAD:
+                tile = new Bad();
+                break;
+            case TileAttribute.CASTLE:
+                tile = new Castle();
+                break;
+            case TileAttribute.HOME:
+                tile = new Home();
+                break;
+        }
+
+        tile.Init(info);
+
+        return tile;
     }
 }

@@ -50,6 +50,12 @@ MonoBehaviour:
   m_Gravity: 1.5
   m_Radius: 15
   m_Bounce: 1
+  m_OrbTemplate: {fileID: 1796651500071074617, guid: 1af54b3d0f54882428e3531ca0431c1d,
+    type: 3}
+  m_OrbCountMin: 4
+  m_OrbCountMax: 6
+  m_OffsetMin: 0.125
+  m_OffsetMax: 0.2
 --- !u!50 &8167298922332514181
 Rigidbody2D:
   serializedVersion: 4
