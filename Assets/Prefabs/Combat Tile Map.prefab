@@ -151,10 +151,11 @@ MonoBehaviour:
   m_SpawnRate: 0.035
   m_SpawnHeight: 6
   m_FallDepth: 4
-  m_ChildHeight: 0.1
+  m_ChildHeight: 0.25
   m_ChildSpawnDelay: 0.35
   m_FallSpeed: 1
   m_FadeSpeed: 2
+  m_EmptyCenter: 1
   m_TileTypes:
   - Type: 4
     Tile: {fileID: 11400000, guid: 4faf4bf2582276e439fedc46ed7214a9, type: 2}
@@ -186,17 +187,17 @@ MonoBehaviour:
     Child: {fileID: 1955266975757903165, guid: 83d527c67160ad84791dc32209ca3de0, type: 3}
     Occurrence: 0.1
     Current: 0
-  - Type: 2
+  - Type: 4
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 1955266975757903165, guid: 855f90b44cfe7e6428b6e1062f161eb8, type: 3}
     Occurrence: 0.1
     Current: 0
-  - Type: 2
+  - Type: 4
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 1955266975757903165, guid: d2d3fdb3a8be73a48833ac2bb53a07d2, type: 3}
     Occurrence: 0.1
     Current: 0
-  - Type: 2
+  - Type: 4
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 1955266975757903165, guid: 504fadce4d24cab44853edac3006bf66, type: 3}
     Occurrence: 0.1

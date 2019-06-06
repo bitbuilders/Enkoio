@@ -67,6 +67,13 @@ public class CombatManager : Singleton<CombatManager>
         //hide the combat map and set it to null
         m_tileMap.Hide();
         m_tileMap = null;
+
+        EnemyAI[] enemies = FindObjectsOfType<EnemyAI>();
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            enemies[i].Active = false;
+            Destroy(enemies[i].gameObject, 0.35f);
+        }
     }
 
     IEnumerator FindAllEnemiesInScene()

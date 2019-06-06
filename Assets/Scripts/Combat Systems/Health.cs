@@ -6,6 +6,7 @@ public class Health : MonoBehaviour
 {
     [SerializeField] int m_maxHealthPoints = 100;
     [SerializeField] int m_currentHealthPoints = 100;
+    [SerializeField] bool m_DestroyOnDeath = true;
 
     public bool IsAlive()
     {
@@ -60,7 +61,7 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        Destroy(this.gameObject);
+        if (m_DestroyOnDeath) Destroy(this.gameObject);
     }
 
     private int DetermindDamageDone(int baseDamage, eElementType attackingElement, eElementType defendingElement)

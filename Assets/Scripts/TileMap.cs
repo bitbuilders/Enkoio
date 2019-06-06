@@ -44,6 +44,7 @@ public class TileMap : MonoBehaviour
     [SerializeField] [Range(0.0f, 10.0f)] float m_ChildSpawnDelay = 1.5f;
     [SerializeField] [Range(0.0f, 10.0f)] float m_FallSpeed = 1.25f;
     [SerializeField] [Range(0.0f, 10.0f)] float m_FadeSpeed = 2.0f;
+    [SerializeField] bool m_EmptyCenter = false;
     [SerializeField] List<TileType> m_TileTypes = null;
 
     List<Tile> m_Tiles;
@@ -280,12 +281,15 @@ public class TileMap : MonoBehaviour
             bool canPlace = false;
             if (time >= m_SpawnRate)
             {
-                time -= m_SpawnRate;
-                IEnumerable<MovingTile> t = null;
-                if (m_MovingTiles.Count > 0)
-                    t = m_MovingTiles.Where(mt => mt.Tile.CellPosition == new Vector2Int(x, y));
-                canPlace = (t == null || t.Count() == 0);
-                if (canPlace) AddTile(new Vector2Int(x, y));
+                if (!m_EmptyCenter || !(m_EmptyCenter && x == -1 && y == -1))
+                {
+                    time -= m_SpawnRate;
+                    IEnumerable<MovingTile> t = null;
+                    if (m_MovingTiles.Count > 0)
+                        t = m_MovingTiles.Where(mt => mt.Tile.CellPosition == new Vector2Int(x, y));
+                    canPlace = (t == null || t.Count() == 0);
+                    if (canPlace) AddTile(new Vector2Int(x, y));
+                }
                 if (y >= p1.y)
                 {
                     y--;
