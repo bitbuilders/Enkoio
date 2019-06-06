@@ -41,7 +41,7 @@ public class CombatManager : Singleton<CombatManager>
                 if (enemyHealth)
                 {
                     int damage = Enko.Instance.Damage;
-                    eElementType playerElement = m_Player.Element;
+                    eElementType playerElement = Enko.Instance.Element;
                     eElementType enemyElement = m_enemies[i].GetElementType();
                     enemyHealth.TakeDamage(damage, playerElement, enemyElement);
                 }
