@@ -61,7 +61,7 @@ public class Enko : Singleton<Enko>
 
     private void Start()
     {
-        m_Inventory = GetComponentInChildren<Inventory>();
+        m_Inventory = GetComponent<Inventory>();
         m_Inventory.Init(gameObject);
 
         m_SpriteRenderer = GetComponentInChildren<SpriteRenderer>();

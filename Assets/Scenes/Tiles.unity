@@ -947,27 +947,27 @@ MonoBehaviour:
   - Type: 0
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 6552486187829298160, guid: bac3c2df15e6b13478d8382d504bdc9f, type: 3}
-    Occurrence: 0.1
+    Occurrence: 0
     Current: 0.051086158
   - Type: 1
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 0}
-    Occurrence: 1
+    Occurrence: 0
     Current: 0.13027598
-  - Type: 1
+  - Type: 2
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
-    Child: {fileID: 1996653378961930296, guid: eb4a4cb14a83a7d4186331197b7959ec, type: 3}
-    Occurrence: 0.05
+    Child: {fileID: 6324846024848393722, guid: 3aaa20591e336c6428275f39a6e685df, type: 3}
+    Occurrence: 1
     Current: 0.0051511596
-  - Type: 1
+  - Type: 3
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 395601572100327561, guid: d2a6fa952ee20fc4691efacb694dd9e8, type: 3}
-    Occurrence: 0.2
+    Occurrence: 0
     Current: 0.17632397
-  - Type: 1
+  - Type: 4
     Tile: {fileID: 11400000, guid: 4faf4bf2582276e439fedc46ed7214a9, type: 2}
     Child: {fileID: 0}
-    Occurrence: 0.5
+    Occurrence: 0
     Current: 0
 --- !u!1001 &769374160
 PrefabInstance:
@@ -1040,6 +1040,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Combat Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7519026854389772547, guid: 32ceaf626d191a84ea41228efc6317ef,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32ceaf626d191a84ea41228efc6317ef, type: 3}

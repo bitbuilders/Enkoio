@@ -23,6 +23,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public void NewBattle()
     {
+        gameObject.SetActive(true);
         GameObject go = Instantiate(m_combatTileMap, m_GridTransform);
         m_tileMap = go.GetComponent<TileMap>();
         TileManager.Instance.HideTileMap();
@@ -61,6 +62,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public void EndBattle()
     {
+        gameObject.SetActive(false);
         //Show the world map
         TileManager.Instance.ShowTileMap();
         //hide the combat map and set it to null
