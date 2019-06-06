@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6506193195988300568}
   - component: {fileID: 6506193195988300571}
   - component: {fileID: 6506193195988300570}
+  - component: {fileID: 6506193196177284263}
   m_Layer: 0
   m_Name: Enko
   m_TagString: Untagged
@@ -81,7 +82,6 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   m_Damage: 8
-  m_Health: 100
   m_ElementSwapSpeed: 3
   m_SquishScale: {x: 0.8, y: 0.5, z: 1}
   m_SwipeTime: 0.5
@@ -195,6 +195,20 @@ MonoBehaviour:
     ItemTemplate: {fileID: 1684846302330167721, guid: e5b6f315d6549b148a8937b663c45501,
       type: 3}
     Count: 0
+--- !u!114 &6506193196177284263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6506193195988300569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0222bca33cf1c40418d882582e51ed86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxHealthPoints: 100
+  m_currentHealthPoints: 100
 --- !u!1 &6506193197364751430
 GameObject:
   m_ObjectHideFlags: 0

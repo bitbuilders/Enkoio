@@ -17,7 +17,6 @@ public class Enko : Singleton<Enko>
     [SerializeField] TextMeshProUGUI m_SwipeInfo = null;
     [SerializeField] AnimationCurve m_SwapCurve = null;
     [SerializeField] [Range(0, 100)] int m_Damage = 20;
-    [SerializeField] [Range(0, 100)] int m_Health = 100;
     [SerializeField] [Range(0.0f, 10.0f)] float m_ElementSwapSpeed = 1.5f;
     [SerializeField] Vector3 m_SquishScale = new Vector3(0.8f, 0.5f, 1.0f);
     [SerializeField] [Range(0.0f, 2.0f)] float m_SwipeTime = 1.0f;
@@ -42,7 +41,6 @@ public class Enko : Singleton<Enko>
 
     public Vector2 SpritePosition { get { return m_SpriteRenderer.transform.position; } }
     public int Damage { get { return m_Damage; } }
-    public int Health { get { return m_Health; } set { m_Health = value; } }
     public eElementType Element { get; private set; }
     public bool RightSwipe { get; private set; }
     public bool LeftSwipe { get; private set; }
@@ -78,7 +76,6 @@ public class Enko : Singleton<Enko>
 
         m_CurrentElement = 0;
         Element = (eElementType)m_CurrentElement;
-        m_MaxHealth = m_Health;
     }
 
     private void Update()

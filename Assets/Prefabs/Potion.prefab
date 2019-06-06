@@ -48,6 +48,8 @@ MonoBehaviour:
   m_Lifetime: 1
   m_YKill: -0.8
   m_Gravity: 1.5
+  m_Radius: 15
+  m_Bounce: 1
 --- !u!50 &8167298922332514181
 Rigidbody2D:
   serializedVersion: 4
