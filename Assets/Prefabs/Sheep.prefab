@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 510058419705813771}
   m_Layer: 0
   m_Name: Sprite
-  m_TagString: Untagged
+  m_TagString: Sheep
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,7 +119,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.12, y: 0.14}
+  m_Size: {x: 0.16, y: 0.18}
   m_EdgeRadius: 0
 --- !u!1 &6782773070206060452
 GameObject:
@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 895361404567020438}
   m_Layer: 0
   m_Name: Sheep
-  m_TagString: Untagged
+  m_TagString: Sheep
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

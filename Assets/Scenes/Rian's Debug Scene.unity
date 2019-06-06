@@ -653,7 +653,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265893018}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 161.86984, y: 300.1823, z: -145.625}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 788847154}
@@ -1818,6 +1818,8 @@ MonoBehaviour:
   endArea: {fileID: 1881181194}
   sheepPrefab: {fileID: 6782773070206060452, guid: 7785ae07cadf6634881f97c2abbb66ba,
     type: 3}
+  minigameTime: 15
+  numCollected: 0
 --- !u!4 &1220484755
 Transform:
   m_ObjectHideFlags: 0

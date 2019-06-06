@@ -6,41 +6,37 @@ public class Sheep : MonoBehaviour
 {
     
     public Vector2 endPosition = Vector2.zero;
-    [Range(1.0f, 10.0f)]
     public float speed = 1.0f;
+    private Vector2 position = Vector2.zero;
+    private float angle = 0.0f;
+    private Vector2 offset = Vector2.zero;
 
     void Start()
     {
-        StartCoroutine(Hop());
+        position = transform.position;
     }
 
     void Update()
     {
-        transform.parent.position = Vector2.MoveTowards(transform.position, endPosition, Time.deltaTime * speed);
-        Vector2 position2D = new Vector2(transform.position.x, transform.position.y);
-        if((position2D - endPosition).magnitude < .01f)
+        float dt = Time.deltaTime;
+        position = Vector2.MoveTowards(position, endPosition, dt * speed);
+
+        angle += dt * 1080.0f;
+        angle %= 360.0f;
+        offset.y = (Mathf.Acos(Mathf.Cos(angle * Mathf.Deg2Rad)) / 10.0f);
+
+        transform.position = position + offset;
+
+        if((position - endPosition).magnitude < .01f)
         {
-            Destroy(this.gameObject);
+            Destroy(transform.parent.gameObject);
         }
     }
 
-    float angle = 0.0f;
-    IEnumerator Hop()
-    {
-        Vector3 offset = Vector3.zero;
-        while(true)
-        {
-            angle += Time.deltaTime;
-            angle %= 360.0f;
-            offset.y = Mathf.Sin(angle);
-            transform.position += offset;
-            yield return null;
-        }
-    }
 
     public void Collect()
     {
-        Destroy(this.gameObject);
+        Destroy(transform.parent.gameObject);
     }
 
     private void OnDestroy()
