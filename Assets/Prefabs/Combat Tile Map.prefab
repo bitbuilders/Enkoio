@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8671414855536005269}
   - component: {fileID: 8671414855536005268}
   m_Layer: 0
-  m_Name: Tilemap
+  m_Name: Combat Tile Map
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,11 +149,11 @@ MonoBehaviour:
     m_RotationOrder: 4
   m_ViewSize: 3
   m_SpawnRate: 0.035
-  m_SpawnHeight: 5
-  m_FallDepth: 5
-  m_ChildHeight: 0.3
-  m_ChildSpawnDelay: 1.25
-  m_FallSpeed: 1.25
+  m_SpawnHeight: 6
+  m_FallDepth: 4
+  m_ChildHeight: 0.1
+  m_ChildSpawnDelay: 0.35
+  m_FallSpeed: 1
   m_FadeSpeed: 2
   m_TileTypes:
   - Type: 4
@@ -161,22 +161,22 @@ MonoBehaviour:
     Child: {fileID: 171364, guid: f9e8de9a259544d4abf62f44ee21bf37, type: 3}
     Occurrence: 0.2
     Current: 0
-  - Type: 2
+  - Type: 4
     Tile: {fileID: 11400000, guid: 4faf4bf2582276e439fedc46ed7214a9, type: 2}
     Child: {fileID: 1955266975757903165, guid: aeb937c90ce3e8b43b8375d2dd884a13, type: 3}
     Occurrence: 0.1
     Current: 0
-  - Type: 2
+  - Type: 4
     Tile: {fileID: 11400000, guid: 4faf4bf2582276e439fedc46ed7214a9, type: 2}
     Child: {fileID: 1955266975757903165, guid: 1b7cb791ffdaf4746a33b503373af747, type: 3}
     Occurrence: 0.1
     Current: 0
-  - Type: 2
+  - Type: 4
     Tile: {fileID: 11400000, guid: 4faf4bf2582276e439fedc46ed7214a9, type: 2}
     Child: {fileID: 1955266975757903165, guid: 1a226ea6a28fcef458b1f52979b5c795, type: 3}
     Occurrence: 0.1
     Current: 0
-  - Type: 2
+  - Type: 4
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 1955266975757903165, guid: 73e60dd2e71ed3049a3ffdb9e65aafc4, type: 3}
     Occurrence: 0.1

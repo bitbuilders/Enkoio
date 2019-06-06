@@ -5,8 +5,7 @@ using UnityEngine;
 public class CombatManager : Singleton<CombatManager>
 {
     public List<EnemyAI> m_enemies = new List<EnemyAI>();
-
-    [SerializeField] Enko m_Player = default;
+    
     [SerializeField] float m_enemyRaduis = 2.0f;
     [SerializeField] GameObject m_combatTileMap = default;
     [SerializeField] Transform m_GridTransform = default;

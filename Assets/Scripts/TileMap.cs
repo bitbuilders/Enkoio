@@ -164,10 +164,6 @@ public class TileMap : MonoBehaviour
         if (tile == Vector2Int.zero) return false;
 
         //print("tile: " + tile + " dir: " + dir);
-        IEnumerable<MovingTile> t = null;
-        if (m_MovingTiles.Count > 0)
-            t = m_MovingTiles.Where(mt => mt.Tile.CellPosition - tile == Vector2Int.zero);
-        if (t != null && t.Count() > 0) t.First().Tile.OnEnter();
 
         // Clear board
         m_MovingTiles.ForEach(mt => { m_Tilemap.SetTile((Vector3Int)(mt.Tile.CellPosition + tile), null); });
@@ -188,6 +184,8 @@ public class TileMap : MonoBehaviour
             SetTilePosition(m_MovingTiles[i].Tile.CellPosition, m_MovingTiles[i].TilePath.P1);
             if (m_MovingTiles[i].Child) m_MovingTiles[i].Child.transform.position = m_MovingTiles[i].ChildPath.P1;
         }
+
+        EnterCenterTile();
 
         StartCoroutine(MoveTiles(dir * -1, tile));
 
@@ -306,6 +304,7 @@ public class TileMap : MonoBehaviour
 
         float end = Time.time;
         print("Took: " + (end - start) + " seconds to spawn tiles");
+        EnterCenterTile();
 
         // Here lies code that Lucas brutally murdered, do not trust anything he says R.I.P.
     }
@@ -321,8 +320,8 @@ public class TileMap : MonoBehaviour
         UnityEngine.Tilemaps.Tile tileSprite = Instantiate(tt.Tile);
         m_Tilemap.SetTile((Vector3Int)pos, tileSprite);
 
-        Tile tile = new Tile();
-        tile.Init(new TileInfo(pos, tt.Type, m_SpawnCurve, m_ChildCurve, m_FallSpeed, this, tileSprite));
+        TileInfo info = new TileInfo(pos, tt.Type, m_SpawnCurve, m_ChildCurve, m_FallSpeed, this, tileSprite);
+        Tile tile = CreateTile(tt.Type, info);
         tile.OnCreate();
         m_Tiles.Add(tile);
 
@@ -446,6 +445,14 @@ public class TileMap : MonoBehaviour
         return m_Tilemap.GetTransformMatrix((Vector3Int)tile).GetColumn(3);
     }
 
+    void EnterCenterTile()
+    {
+        IEnumerable<MovingTile> t = null;
+        if (m_MovingTiles.Count > 0)
+            t = m_MovingTiles.Where(mt => mt.Tile.CellPosition == Vector2Int.zero);
+        if (t != null && t.Count() > 0) t.First().Tile.OnEnter();
+    }
+
     public List<TileType> GetTileTypes()
     {
         return m_TileTypes;
@@ -454,5 +461,33 @@ public class TileMap : MonoBehaviour
     public List<Tile> GetTiles()
     {
         return m_Tiles;
+    }
+
+    Tile CreateTile(TileAttribute type, TileInfo info)
+    {
+        Tile tile = null;
+
+        switch (type)
+        {
+            case TileAttribute.SHOP:
+                tile = new Shop();
+                break;
+            case TileAttribute.MYSTERY:
+                tile = new Mystery();
+                break;
+            case TileAttribute.BAD:
+                tile = new Bad();
+                break;
+            case TileAttribute.CASTLE:
+                tile = new Castle();
+                break;
+            case TileAttribute.HOME:
+                tile = new Home();
+                break;
+        }
+
+        tile.Init(info);
+
+        return tile;
     }
 }
