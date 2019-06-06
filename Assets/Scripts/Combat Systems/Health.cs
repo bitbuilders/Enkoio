@@ -15,6 +15,13 @@ public class Health : MonoBehaviour
     public void TakeDamage(int damage, eElementType attackingElement, eElementType defendingElement)
     {
         int modDamage = DetermindDamageDone(damage, attackingElement, defendingElement);
+
+        EnemyAI enemy = GetComponentInParent<EnemyAI>();
+        if (enemy)
+        {
+            print("enemy takes: " + modDamage + " Damage");
+
+        }
         m_currentHealthPoints -= modDamage;
         if (m_currentHealthPoints <= 0) Die();
     }
@@ -29,6 +36,16 @@ public class Health : MonoBehaviour
         {
             m_currentHealthPoints += healPoints;
         }
+    }
+
+    public void ResetHealth()
+    {
+        m_currentHealthPoints = m_maxHealthPoints;
+    }
+
+    public int GetMaxHealth()
+    {
+        return m_maxHealthPoints;
     }
 
     public void ResetHealthToMax()

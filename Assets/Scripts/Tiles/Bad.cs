@@ -7,6 +7,7 @@ public class Bad : Tile
     public override void OnEnter()
     {
         base.OnEnter();
+        CombatManager.Instance.NewBattle();
     }
 
     public override void OnExit()

@@ -17,7 +17,6 @@ public class Enko : Singleton<Enko>
     [SerializeField] TextMeshProUGUI m_SwipeInfo = null;
     [SerializeField] AnimationCurve m_SwapCurve = null;
     [SerializeField] [Range(0, 100)] int m_Damage = 20;
-    [SerializeField] [Range(0, 100)] int m_Health = 100;
     [SerializeField] [Range(0.0f, 10.0f)] float m_ElementSwapSpeed = 1.5f;
     [SerializeField] Vector3 m_SquishScale = new Vector3(0.8f, 0.5f, 1.0f);
     [SerializeField] [Range(0.0f, 2.0f)] float m_SwipeTime = 1.0f;
@@ -42,7 +41,6 @@ public class Enko : Singleton<Enko>
 
     public Vector2 SpritePosition { get { return m_SpriteRenderer.transform.position; } }
     public int Damage { get { return m_Damage; } }
-    public int Health { get { return m_Health; } }
     public eElementType Element { get; private set; }
     public bool RightSwipe { get; private set; }
     public bool LeftSwipe { get; private set; }
@@ -78,13 +76,13 @@ public class Enko : Singleton<Enko>
 
         m_CurrentElement = 0;
         Element = (eElementType)m_CurrentElement;
-        m_MaxHealth = m_Health;
     }
 
     private void Update()
     {
         UpdateSwipe();
 
+        UpdateTap();
         InCombat = true; // REMOVE ME WHEN IM DONE DEBUGGING
         if (Input.GetKeyDown(KeyCode.UpArrow)) UpSwipe = true;
         if (Input.GetKeyDown(KeyCode.DownArrow)) DownSwipe = true;
@@ -112,6 +110,28 @@ public class Enko : Singleton<Enko>
         else if (DownSwipe)
         {
             m_Inventory.Close();
+        }
+    }
+
+    void UpdateTap()
+    {
+        Vector3 touchStart = Vector3.zero;
+        Vector3 touchEnd = Vector3.one;
+        if (Input.touches.Length > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+            if (touch.phase == TouchPhase.Began)
+            {
+                m_TouchPosition = touch.position;
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                touchEnd = touch.position;
+                if (Mathf.Abs(m_TouchPosition.x - touchEnd.x) < 25 && Mathf.Abs(m_TouchPosition.y - touchEnd.y) < 25)
+                {
+                    CombatManager.Instance.CheckIfEnemyTapped(touch.position);
+                }
+            }
         }
     }
 
@@ -186,7 +206,7 @@ public class Enko : Singleton<Enko>
         if (Mathf.Abs(m_TouchDir.y) < m_VerticalLeeway)
         {
             float dot = Vector2.Dot(m_TouchDir, Vector2.right);
-            
+
             if (dot > 0.0f) // Right
             {
                 RightSwipe = true;
@@ -200,7 +220,7 @@ public class Enko : Singleton<Enko>
         if (Mathf.Abs(m_TouchDir.x) < m_HorizontalLeeway)
         {
             float dot = Vector2.Dot(m_TouchDir, Vector2.up);
-            
+
             if (dot > 0.0f) // Up
             {
                 UpSwipe = true;
