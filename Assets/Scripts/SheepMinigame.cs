@@ -27,6 +27,8 @@ public class SheepMinigame : Singleton<SheepMinigame>
 
     bool inGame = false;
 
+    List<GameObject> sheep = null;
+
     void Start()
     {
 
@@ -74,6 +76,7 @@ public class SheepMinigame : Singleton<SheepMinigame>
                     s.transform.position = RandomPointInBounds2D(spawnArea.bounds);
                     s.endPosition = RandomPointInBounds2D(endArea.bounds);
                     s.speed = Random.Range(1.0f, 2.0f);
+                    sheep.Add(s.gameObject);
                 }
                 yield return new WaitForSeconds(1.0f);
             }
@@ -86,6 +89,7 @@ public class SheepMinigame : Singleton<SheepMinigame>
 
     public void StartGame()
     {
+        sheep = new List<GameObject>();
         timeLeft = minigameTime;
         numCollected = 0;
         numSheep = 0;
@@ -99,6 +103,13 @@ public class SheepMinigame : Singleton<SheepMinigame>
         inGame = false;
         StopAllCoroutines();
         CombatManager.Instance.EndBattle();
+        foreach(GameObject GO in sheep)
+        {
+            if(GO != null)
+            {
+                Destroy(GO);
+            }
+        }
     }
 
     Vector2 RandomPointInBounds2D(Bounds bounds)
