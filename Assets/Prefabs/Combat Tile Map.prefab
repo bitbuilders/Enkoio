@@ -159,7 +159,7 @@ MonoBehaviour:
   m_TileTypes:
   - Type: 4
     Tile: {fileID: 11400000, guid: 4faf4bf2582276e439fedc46ed7214a9, type: 2}
-    Child: {fileID: 171364, guid: f9e8de9a259544d4abf62f44ee21bf37, type: 3}
+    Child: {fileID: 0}
     Occurrence: 0.2
     Current: 0
   - Type: 4
@@ -182,7 +182,7 @@ MonoBehaviour:
     Child: {fileID: 1955266975757903165, guid: 73e60dd2e71ed3049a3ffdb9e65aafc4, type: 3}
     Occurrence: 0.1
     Current: 0
-  - Type: 2
+  - Type: 4
     Tile: {fileID: 11400000, guid: 310b6ae3f3169a2449c6526d765d3e7f, type: 2}
     Child: {fileID: 1955266975757903165, guid: 83d527c67160ad84791dc32209ca3de0, type: 3}
     Occurrence: 0.1

@@ -9,8 +9,8 @@ public class InventoryItem : Touchable
     [SerializeField] [Range(0.0f, 10.0f)] float m_MaxDistance = 1.0f;
     [SerializeField] [Range(0.0f, 10.0f)] float m_MinDistance = 0.2f;
     [SerializeField] [Range(0.0f, 10.0f)] float m_ItemSize = 0.2f;
-    [SerializeField] [Range(0.0f, 500.0f)] float m_ForceAmplifier = 500.0f;
-    [SerializeField] [Range(0.0f, 500.0f)] float m_MaxForce = 250.0f;
+    [SerializeField] [Range(0.0f, 1000.0f)] float m_ForceAmplifier = 500.0f;
+    [SerializeField] [Range(0.0f, 1000.0f)] float m_MaxForce = 250.0f;
 
     public Inventory Inventory { get; set; }
     public Vector2 Force { get; private set; }

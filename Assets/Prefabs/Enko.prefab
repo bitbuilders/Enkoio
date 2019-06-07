@@ -162,7 +162,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  m_Damage: 8
+  m_Damage: 20
   m_ElementSwapSpeed: 3
   m_SquishScale: {x: 0.8, y: 0.5, z: 1}
   m_SwipeTime: 0.5

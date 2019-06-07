@@ -70,7 +70,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 21300000, guid: 9ef534cdcaf35bd43bd6263a72aa4e7a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1463816443c1dea48b7b909bf4a9a74e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -95,6 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_maxHealthPoints: 100
   m_currentHealthPoints: 100
+  m_DestroyOnDeath: 1
 --- !u!114 &1955266975757903161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -108,7 +109,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackTimer: 6
-  m_missChance: 0
   m_damage: 15
-  m_target: {fileID: 0}
   m_elemntType: 1

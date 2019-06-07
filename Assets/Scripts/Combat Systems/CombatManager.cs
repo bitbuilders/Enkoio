@@ -51,13 +51,18 @@ public class CombatManager : Singleton<CombatManager>
                     m_enemies.Remove(m_enemies[i]);
                     if(m_enemies.Count == 0)
                     {
-                        EndBattle();
+                        StartMinigame();
                     }
                 }
                 return true;
             }
         }
         return false;
+    }
+
+    public void StartMinigame()
+    {
+        SheepMinigame.Instance.StartGame();
     }
 
     public void EndBattle()

@@ -29,7 +29,7 @@ public class SheepMinigame : Singleton<SheepMinigame>
 
     void Start()
     {
-        StartGame();
+
     }
 
     void Update()
@@ -73,7 +73,7 @@ public class SheepMinigame : Singleton<SheepMinigame>
                     s = GameObject.Instantiate(sheepPrefab).GetComponentInChildren<Sheep>();
                     s.transform.position = RandomPointInBounds2D(spawnArea.bounds);
                     s.endPosition = RandomPointInBounds2D(endArea.bounds);
-                    s.speed = Random.Range(2.0f, 4.0f);
+                    s.speed = Random.Range(1.0f, 2.0f);
                 }
                 yield return new WaitForSeconds(1.0f);
             }
@@ -98,6 +98,7 @@ public class SheepMinigame : Singleton<SheepMinigame>
     {
         inGame = false;
         StopAllCoroutines();
+        CombatManager.Instance.EndBattle();
     }
 
     Vector2 RandomPointInBounds2D(Bounds bounds)
