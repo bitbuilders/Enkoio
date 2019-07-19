@@ -1,2 +1,2 @@
 # Enkoio
-We are good
+Built by 4 awesome developers.
